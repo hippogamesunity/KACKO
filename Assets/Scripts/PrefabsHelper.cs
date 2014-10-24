@@ -5,29 +5,24 @@ namespace Assets.Scripts
 {
 	public static class PrefabsHelper
 	{
-        public static GameObject InstantiateCell(Transform parent)
+        public static GameObject InstantiateLink(Transform parent)
         {
-            return Instantiate("Cell", parent);
+            return Instantiate("Link", parent);
         }
 
-        public static GameObject InstantiateCircle(Transform parent)
+        public static GameObject InstantiatePage(Transform parent)
         {
-            return Instantiate("Circle", parent);
+            return Instantiate("Page", parent);
         }
 
-        public static GameObject InstantiateLine(Transform parent)
+        public static GameObject InstantiatePaging(Transform parent)
         {
-            return Instantiate("Line", parent);
+            return Instantiate("Paging", parent);
         }
 
-        public static GameObject InstantiateCard(Transform parent)
+        public static GameObject InstantiateCompanyButton(Transform parent)
         {
-            return Instantiate("Card", parent);
-        }
-
-        public static GameObject InstantiateSlot(Transform parent)
-        {
-            return Instantiate("Slot", parent);
+            return Instantiate("CompanyButton", parent);
         }
 
         private static GameObject Instantiate(string name, Transform parent)

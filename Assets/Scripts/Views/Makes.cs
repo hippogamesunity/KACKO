@@ -1,0 +1,38 @@
+﻿using System.Linq;
+using SimpleJSON;
+using UnityEngine;
+
+namespace Assets.Scripts.Views
+{
+    public class Makes : ViewBasePaging
+    {
+        protected override void Initialize()
+        {
+            var makes = Profile.Makes.Childs.Where(i => HasModels(Profile.Models[i["id"]])).ToList();
+
+            CreatePages(Mathf.CeilToInt(makes.Count / (Size.x * Size.y)));
+
+            for (var i = 0; i < makes.Count; i++)
+            {
+                var page = (int) Mathf.Floor(i / (Size.x * Size.y));
+                var j = i % (Size.x * Size.y);
+                var instance = PrefabsHelper.InstantiateLink(Pages[page].transform);
+                var make = makes[i]["text"];
+                var id = int.Parse(makes[i]["id"]);
+
+                instance.name = make;
+                instance.GetComponent<UILabel>().text = make;
+                instance.GetComponent<SelectButton>().Selected += () => GetComponent<Engine>().SelectMake(id);
+                instance.transform.localPosition =
+                    new Vector2(Step.x * Mathf.Floor(j / Size.x) - Position.x, Position.y - Step.y * (j % Size.x));
+            }
+        }
+
+        private static bool HasModels(JSONNode models)
+        {
+            if (models.Count == 1 && models[0]["text"] != "\"*\"") return false;
+
+            return models.Count > 0;
+        }
+    }
+}
