@@ -22,9 +22,9 @@ namespace Assets.Scripts.Views
 
                 instance.name = make;
                 instance.GetComponent<UILabel>().text = make;
-                instance.GetComponent<SelectButton>().Selected += () => GetComponent<Engine>().SelectMake(id);
+                instance.GetComponent<GameButton>().Up += () => GetComponent<Engine>().SelectMake(id);
                 instance.transform.localPosition =
-                    new Vector2(Step.x * Mathf.Floor(j / Size.x) - Position.x, Position.y - Step.y * (j % Size.x));
+                    new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
             }
         }
 

@@ -10,6 +10,11 @@ namespace Assets.Scripts
             return Instantiate("Link", parent);
         }
 
+        public static GameObject InstantiateLinkYear(Transform parent)
+        {
+            return Instantiate("LinkYear", parent);
+        }
+
         public static GameObject InstantiatePage(Transform parent)
         {
             return Instantiate("Page", parent);

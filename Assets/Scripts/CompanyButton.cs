@@ -5,5 +5,6 @@
         public UISprite Icon;
         public UILabel Name;
         public UILabel Price;
+        public GameButton Button;
     }
 }

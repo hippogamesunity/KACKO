@@ -10,9 +10,10 @@ namespace Assets.Scripts.Views
         protected readonly List<GameObject> Pages = new List<GameObject>();
         protected readonly List<GameObject> Pagings = new List<GameObject>();
         protected int Index;
-        protected Vector2 Size = new Vector2(14, 3);
-        protected Vector2 Step = new Vector2(170, 45);
-        protected Vector2 Position = new Vector2(230, 430);
+
+        protected virtual Vector2 Size { get { return new Vector2(3, 18); } }
+        protected virtual Vector2 Step { get { return new Vector2(180, 45); } }
+        protected virtual Vector2 Position { get { return new Vector2(250, 430); } }
 
         protected void CreatePages(int count)
         {
