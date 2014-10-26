@@ -1,14 +1,14 @@
 ﻿using System;
+using System.IO;
 using SimpleJSON;
-using UnityEngine;
 
 namespace Assets.Scripts
 {
     public static class Profile
     {
-        public static JSONNode Makes;
-        public static JSONNode Models;
-        public static string Results;
+        public static JSONNode Companies;
+        public static JSONNode Cars;
+        public static JSONNode Results;
 
         public static int Make;
         public static int Model;
@@ -21,9 +21,9 @@ namespace Assets.Scripts
 
         public static void Load()
         {
-            Makes = JSON.Parse(Resources.Load<TextAsset>("makes").text);
-            Models = JSON.Parse(Resources.Load<TextAsset>("models").text);
-            Results = Resources.Load<TextAsset>("results").text;
+            Companies = JSON.Parse(File.ReadAllText(@"d:\companies.json"));
+            Cars = JSON.Parse(File.ReadAllText(@"d:\cars.json"));
+            Results = JSON.Parse(File.ReadAllText(@"d:\kasko.json"));
 
             Make = 29;
             Model = 318;

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Assets.Scripts.Common;
+using SimpleJSON;
 using UnityEngine;
 
 namespace Assets.Scripts.Views
@@ -15,17 +16,37 @@ namespace Assets.Scripts.Views
 
         protected override void Initialize()
         {
-            var html = Profile.Results.Replace(Environment.NewLine, null).Replace("\t", null);
-            var tbody = Regex.Match(html, @"<tbody>.*?</tbody>").Value;
-            var cells = Regex.Matches(tbody, "<td>(?<value>.*?)</td>");
-            var results = new Dictionary<string, int>();
+            var companies = JSON.Parse(File.ReadAllText(@"d:\companies.json"));
+            var kasko = JSON.Parse(File.ReadAllText(@"d:\kasko.json"));
 
-            for (var i = 0; i < cells.Count; i += 3)
+            var results = new List<Result>();
+
+            for (int k = 0; k < kasko["results"].Count; k++)
             {
-                results.Add(cells[i + 1].Groups["value"].Value.Trim(), int.Parse(cells[i + 2].Groups["value"].Value.Replace(" ", null)));
+                var result = kasko["results"][k];
+                var price = result["result"]["total"]["premium"];
+                var regions = result["values"]["region"].Childs.Select(i => i.Value).ToList();
+                var companyCode = result["info"]["code"];
+
+                var company = companies.Childs.FirstOrDefault(i => i["calculators"].Childs.Any(j => j["code"].Value == companyCode.Value));
+
+                if (company == null) continue;
+
+                var companyName = company["name"];
+                var companyShortName = company["nameshort"];
+                var companyRating = company["rating"];
+
+                results.Add(new Result
+                {
+                    CompanyName = companyName.Value,
+                    CompanyShortName = companyShortName.Value,
+                    Rating = int.Parse(companyRating.Value),
+                    Price = int.Parse(price.Value.Split(Convert.ToChar("."))[0]),
+                    Regions = regions
+                });
             }
 
-            results = results.Where(i => i.Value > 0).OrderBy(i => i.Value).ToDictionary(i => i.Key, j => j.Value);
+            results = results.OrderBy(i => i.Price).ToList();
 
             CreatePages(Mathf.CeilToInt(results.Count / (Size.x * Size.y)));
 
@@ -38,9 +59,9 @@ namespace Assets.Scripts.Views
 
                 var result = results.ElementAt(i);
 
-                companyButton.Name.SetText(result.Key);
-                companyButton.Price.SetText(result.Value);
-                companyButton.Icon.spriteName = GetCompanyLogo(result.Key);
+                companyButton.Name.SetText(result.CompanyName);
+                companyButton.Price.SetText(result.Price);
+                companyButton.Icon.spriteName = GetCompanyLogo(result.CompanyName);
                 companyButton.Button.Up += () => Debug.Log("TEST");
                 instance.transform.localPosition = new Vector2(i % 3 * Step.x - Position.x, Position.y - Mathf.Floor(j / Size.x) * Step.y);
             }

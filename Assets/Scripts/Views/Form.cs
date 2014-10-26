@@ -46,9 +46,9 @@ namespace Assets.Scripts.Views
 
         public void UpdateForm()
         {
-            var car = Profile.Models[Convert.ToString(Profile.Make)].Childs.Single(i => int.Parse(i["id"]) == Profile.Model);
-            var make = Profile.Makes.Childs.Single(i => int.Parse(i["id"]) == Profile.Make)["text"].Value.Replace("\"", null);
-            var model = car["text"].Value.Replace("\"", null);
+            var car = Profile.Cars.Childs.Single(i => int.Parse(i["id"].Value) == Profile.Make)["models"].Childs.Single(i => int.Parse(i["id"]) == Profile.Model);
+            var make = Profile.Cars.Childs.Single(i => int.Parse(i["id"]) == Profile.Make)["name"].Value;
+            var model = car["name"].Value;
             var price = int.Parse(car["price"]);
             var power = int.Parse(car["power"]);
 

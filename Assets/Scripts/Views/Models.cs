@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Views
@@ -7,7 +7,7 @@ namespace Assets.Scripts.Views
     {
         protected override void Initialize()
         {
-            var models = Profile.Models[Convert.ToString(Profile.Make)];
+            var models = Profile.Cars.Childs.Single(i => int.Parse(i["id"].Value) == Profile.Make)["models"];
 
             CreatePages(Mathf.CeilToInt(models.Count / (Size.x * Size.y)));
 
@@ -16,7 +16,7 @@ namespace Assets.Scripts.Views
                 var page = (int) Mathf.Floor(i / (Size.x * Size.y));
                 var j = i % (Size.x * Size.y);
                 var instance = PrefabsHelper.InstantiateLink(Pages[page].transform);
-                var model = models[i]["text"];
+                var model = models[i]["name"];
                 var id = int.Parse(models[i]["id"]);
 
                 instance.name = model;
