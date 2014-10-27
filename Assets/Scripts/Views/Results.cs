@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Assets.Scripts.Common;
 using SimpleJSON;
@@ -14,20 +13,19 @@ namespace Assets.Scripts.Views
         protected override Vector2 Step { get { return new Vector2(170, 200); } }
         protected override Vector2 Position { get { return new Vector2(170, 380); } }
 
-        protected override void Initialize()
+        public void Initialize(JSONNode companies, JSONNode calc)
         {
-            var companies = JSON.Parse(File.ReadAllText(@"d:\companies.json"));
-            var kasko = JSON.Parse(File.ReadAllText(@"d:\kasko.json"));
-
             var results = new List<Result>();
 
-            for (int k = 0; k < kasko["results"].Count; k++)
+            for (var k = 0; k < calc["results"].Count; k++)
             {
-                var result = kasko["results"][k];
+                var result = calc["results"][k];
                 var price = result["result"]["total"]["premium"];
                 var regions = result["values"]["region"].Childs.Select(i => i.Value).ToList();
-                var companyCode = result["info"]["code"];
 
+                if (Profile.Region != Regions.AnyRegion && !regions.Contains(Profile.Region)) continue;
+
+                var companyCode = result["info"]["code"];
                 var company = companies.Childs.FirstOrDefault(i => i["calculators"].Childs.Any(j => j["code"].Value == companyCode.Value));
 
                 if (company == null) continue;
@@ -58,27 +56,33 @@ namespace Assets.Scripts.Views
                 var companyButton = instance.GetComponent<CompanyButton>();
 
                 var result = results.ElementAt(i);
+                var companyInfo = GetCompanyInfo(result.CompanyName);
 
                 companyButton.Name.SetText(result.CompanyName);
-                companyButton.Price.SetText(result.Price);
-                companyButton.Icon.spriteName = GetCompanyLogo(result.CompanyName);
-                companyButton.Button.Up += () => Debug.Log("TEST");
+                companyButton.Price.SetText(result.Price.ToPriceInt());
+                companyButton.Icon.spriteName = companyInfo.Icon;
+                companyButton.Button.Up += () =>
+                {
+                    var company = GetComponent<Company>();
+
+                    company.Initialize(result, companyInfo);
+                    company.Open(TweenDirection.Right);
+                };
                 instance.transform.localPosition = new Vector2(i % 3 * Step.x - Position.x, Position.y - Mathf.Floor(j / Size.x) * Step.y);
             }
         }
 
-        private string GetCompanyLogo(string company)
+        public static CompanyInfo GetCompanyInfo(string company)
         {
             switch (company)
             {
-                case "Итиль": return "Итиль";
-                case "Эстер": return "Эстер";
-                case "Региональный Страховой Центр": return "Региональный Страховой Центр";
-                case "Авеста": return "Авеста";
-                case "Помощь": return "Помощь";
-                case "Капитал-Полис": return "Капитал-Полис";
-                default: return "Default";
+                default: return KnownCompanies[0];
             }
         }
+
+        private static readonly List<CompanyInfo> KnownCompanies = new List<CompanyInfo>
+        {
+            new CompanyInfo("Default", null)
+        };
     }
 }

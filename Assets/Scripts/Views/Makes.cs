@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using SimpleJSON;
+using UnityEngine;
 
 namespace Assets.Scripts.Views
 {
@@ -6,7 +8,7 @@ namespace Assets.Scripts.Views
     {
         protected override void Initialize()
         {
-            var makes = Profile.Cars; //.Childs.Where(i => HasModels(Profile.Models[i["id"]])).ToList();
+            var makes = Profile.Cars.Childs.Where(i => HasModels(i["models"])).ToList();
 
             CreatePages(Mathf.CeilToInt(makes.Count / (Size.x * Size.y)));
 
@@ -26,11 +28,11 @@ namespace Assets.Scripts.Views
             }
         }
 
-        //private static bool HasModels(JSONNode models)
-        //{
-        //    if (models.Count == 1 && models[0]["name"] != "\"*\"") return false;
+        private static bool HasModels(JSONNode models)
+        {
+            if (models.Count == 1 && models[0]["name"] != "\"*\"") return false;
 
-        //    return models.Count > 0;
-        //}
+            return models.Count > 0;
+        }
     }
 }

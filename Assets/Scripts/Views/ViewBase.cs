@@ -13,6 +13,7 @@ namespace Assets.Scripts.Views
         {
             if (Current != null && !ReferenceEquals(Current, this))
             {
+                Previous = Current;
                 Current.Close(direction == TweenDirection.Right ? TweenDirection.Left : TweenDirection.Right);
             }
 

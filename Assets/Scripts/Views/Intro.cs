@@ -3,5 +3,6 @@
     public class Intro : ViewBase
     {
         public UILabel Text;
+        public GameButton StartButton;
     }
 }

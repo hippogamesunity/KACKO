@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Common;
-using UnityEngine;
 
 namespace Assets.Scripts.Views
 {
@@ -11,14 +10,13 @@ namespace Assets.Scripts.Views
         public UILabel Car;
         public UIInput Price;
         public UIInput Power;
+        public UILabel Region;
         public UILabel Sex;
         public UIInput Age;
         public UIInput Exp;
         public GameButton OsagoButton;
         public GameButton KaskoButton;
-        public Transform[] ProgressBar;
-        public bool Loading;
-
+        
         protected override void Initialize()
         {
             UpdateForm();
@@ -29,19 +27,6 @@ namespace Assets.Scripts.Views
         {
             OsagoButton.Enabled = KaskoButton.Enabled = Profile.Make >= 0 && Profile.Model >= 0 && Profile.Year >= 0 && Profile.Price >= 0
                 && Profile.Sex >= 0 && Profile.Age >= 0 && Profile.Exp >= 0;
-
-            if (Loading)
-            {
-                foreach (var sprite in ProgressBar)
-                {
-                    sprite.transform.localPosition += new Vector3(2, 0);
-
-                    if (sprite.transform.localPosition.x >= 1280)
-                    {
-                        sprite.transform.localPosition = new Vector3(-1280, sprite.transform.localPosition.y);
-                    }
-                }
-            }
         }
 
         public void UpdateForm()
@@ -49,21 +34,12 @@ namespace Assets.Scripts.Views
             var car = Profile.Cars.Childs.Single(i => int.Parse(i["id"].Value) == Profile.Make)["models"].Childs.Single(i => int.Parse(i["id"]) == Profile.Model);
             var make = Profile.Cars.Childs.Single(i => int.Parse(i["id"]) == Profile.Make)["name"].Value;
             var model = car["name"].Value;
-            var price = int.Parse(car["price"]);
-            var power = int.Parse(car["power"]);
-
+            
             Car.SetText("{0} {1} ({2})", make, model, Profile.Year);
-
-            if (price > 0)
-            {
-                Price.value = Convert.ToString(price);
-            }
-
-            if (power > 0)
-            {
-                Power.value = Convert.ToString(power);
-            }
-
+            Region.SetText(Profile.Region);
+            Price.value = Convert.ToString(Profile.Price);
+            Power.value = Convert.ToString(Profile.Power);
+            Sex.SetText(Profile.Sex == 1 ? "М" : "Ж");
             Age.value = Convert.ToString(Profile.Age);
             Exp.value = Convert.ToString(Profile.Exp);
         }
@@ -79,20 +55,22 @@ namespace Assets.Scripts.Views
                     price = Math.Min(99999999, price);
 
                     Profile.Price = price;
+                    Profile.Save();
                     Price.value = Convert.ToString(price);
                 })
             };
 
-            Price.onSubmit = new List<EventDelegate>
+            Power.onSubmit = new List<EventDelegate>
             {
                 new EventDelegate(() =>
                 {
-                    var price = Math.Max(999, int.Parse(Price.value));
+                    var power = Math.Max(999, int.Parse(Power.value));
 
-                    price = Math.Min(60, price);
+                    power = Math.Min(60, power);
 
-                    Profile.Price = price;
-                    Price.value = Convert.ToString(price);
+                    Profile.Power = power;
+                    Profile.Save();
+                    Price.value = Convert.ToString(power);
                 })
             };
 
@@ -105,6 +83,7 @@ namespace Assets.Scripts.Views
                     age = Math.Min(99, age);
 
                     Profile.Age = age;
+                    Profile.Save();
                     Age.value = Convert.ToString(age);
                 })
             };
@@ -118,6 +97,7 @@ namespace Assets.Scripts.Views
                     exp = Math.Min(99, exp);
 
                     Profile.Exp = exp;
+                    Profile.Save();
                     Exp.value = Convert.ToString(exp);
                 })
             };

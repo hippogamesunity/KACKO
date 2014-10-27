@@ -60,8 +60,16 @@ namespace Assets.Scripts.Views
 
                 selectButton.Selected += () =>
                 {
-                    Pages[Index].GetComponent<TweenPanel>().Hide(next > Index ? TweenDirection.Left : TweenDirection.Right);
-                    Pages[next].GetComponent<TweenPanel>().Show(next > Index ? TweenDirection.Right : TweenDirection.Left);
+                    var hide = next > Index ? TweenDirection.Left : TweenDirection.Right;
+                    var show = next > Index ? TweenDirection.Right : TweenDirection.Left;
+
+                    var p1 = Pages[Index].GetComponent<TweenPanel>();
+                    var p2 = Pages[next].GetComponent<TweenPanel>();
+
+                    p1.GetComponent<TweenPanel>().Hide(hide);
+                    p2.GetComponent<TweenPanel>().Hide(show, 0);
+                    p2.GetComponent<TweenPanel>().Show(show);
+
                     Index = next;
                 };
 

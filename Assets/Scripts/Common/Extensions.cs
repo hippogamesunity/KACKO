@@ -18,6 +18,13 @@ namespace Assets.Scripts.Common
 
         public static void SetText(this UILabel label, string text, params object[] args)
         {
+            if (text == null)
+            {
+                label.text = null;
+
+                return;
+            }
+
             text = string.Format(text, args);
 
             var scale = label.transform.localScale;
