@@ -48,22 +48,55 @@ namespace Assets.Scripts
         private const string Login = "mYhx2YytWYulmY392ZtFXZAN2Zh1Wauw2Yt9";
         private const string Password = "Xcldnc6RTMzIAN==";
 
+        private static string CachePath
+        {
+            get { return Path.Combine(Application.persistentDataPath, "cache"); }
+        }
+
         public static void Load()
         {
-            if (NeedUpdate)
+            LoadFormData();
+            LoadUserData();
+            Verify();
+        }
+
+        public static bool NeedSync
+        {
+            get
             {
-                Update();
+                if (PlayerPrefs.HasKey(Keys.Timestamp))
+                {
+                    return (DateTime.UtcNow - DateTime.Parse(PlayerPrefs.GetString(Keys.Timestamp))).TotalHours > 24;
+                }
+
+                return true;
             }
-            else
+        }
+
+        public static void Sync()
+        {
+            var json = JSON.Parse(CalcApi.GetApiKey(B64R.Decode(Login), B64R.Decode(Password)));
+            var error = json["error"];
+
+            if (error != null)
             {
-                LoadFormData();
-                LoadUserData();
-                Verify();
+                throw new Exception(error["message"]);
             }
+
+            ApiKey = json["api_key"];
+            Cars = JSON.Parse(CalcApi.GetCars(ApiKey));
+            Companies = JSON.Parse(CalcApi.GetCompanies(ApiKey));
+
+            PlayerPrefs.SetString(Keys.ApiKey, ApiKey);
+            PlayerPrefs.SetString(Keys.Companies, Companies.ToString());
+            PlayerPrefs.SetString(Keys.Cars, Cars.ToString());
+            PlayerPrefs.SetString(Keys.Timestamp, Convert.ToString(DateTime.UtcNow));
+            PlayerPrefs.Save();
         }
 
         public static void Save()
         {
+            Debug.Log("saving" + Make);
             PlayerPrefs.SetString(Keys.Make, Make);
             PlayerPrefs.SetString(Keys.Model, Model);
             PlayerPrefs.SetInt(Keys.Year, Year);
@@ -73,6 +106,7 @@ namespace Assets.Scripts
             PlayerPrefs.SetString(Keys.Sex, Sex);
             PlayerPrefs.SetInt(Keys.Age, Age);
             PlayerPrefs.SetInt(Keys.Exp, Exp);
+            PlayerPrefs.Save();
         }
 
         public static void SaveResult(string request, string result)
@@ -95,65 +129,6 @@ namespace Assets.Scripts
             }
 
             return null;
-        }
-
-        private static string CachePath
-        {
-            get { return Path.Combine(Application.persistentDataPath, "cache"); }
-        }
-
-        private static bool NeedUpdate
-        {
-            get
-            {
-                if (PlayerPrefs.HasKey(Keys.Timestamp))
-                {
-                    return (DateTime.UtcNow - DateTime.Parse(PlayerPrefs.GetString(Keys.Timestamp))).TotalHours > 24;
-                }
-
-                return true;
-            }
-        }
-
-        private static void Update()
-        {
-            StartLoading("обновление данных...");
-            TaskScheduler.CreateTask(() =>
-            {
-                ScheduledUpdate();
-                LoadUserData();
-                Verify();
-            }, 1);
-        }
-
-        private static void ScheduledUpdate()
-        {
-            try
-            {
-                var json = JSON.Parse(CalcApi.GetApiKey(B64R.Decode(Login), B64R.Decode(Password)));
-                var error = json["error"];
-
-                if (error != null)
-                {
-                    throw new Exception(error["message"]);
-                }
-
-                ApiKey = json["api_key"];
-                Cars = JSON.Parse(CalcApi.GetCars(ApiKey));
-                Companies = JSON.Parse(CalcApi.GetCompanies(ApiKey));
-
-                PlayerPrefs.SetString(Keys.ApiKey, ApiKey);
-                PlayerPrefs.SetString(Keys.Companies, Companies.ToString());
-                PlayerPrefs.SetString(Keys.Cars, Cars.ToString());
-                PlayerPrefs.SetString(Keys.Timestamp, Convert.ToString(DateTime.UtcNow));
-                PlayerPrefs.Save();
-
-                StopLoading("данные успешно обновлены");
-            }
-            catch (Exception e)
-            {
-                StopLoading(string.Format("Ошибка подключения к API: {0}", e.Message), error: true);
-            }
         }
 
         private static void LoadFormData()
@@ -204,10 +179,8 @@ namespace Assets.Scripts
 
         private static void Verify()
         {
-            if (Engine.GetMakeId(Make) == null || Engine.GetModelId(Model) == null)
+            if (Cars != null && (Engine.GetMakeId(Make) == null || Engine.GetModelId(Model) == null))
             {
-                Debug.Log(Region);
-                Debug.Log(Make);
                 Make = null;
                 Model = null;
                 Save();
@@ -218,18 +191,6 @@ namespace Assets.Scripts
                 Region = null;
                 Save();
             }
-        }
-
-        private static void StartLoading(string message)
-        {
-            UnityEngine.Object.FindObjectOfType<Intro>().StartButton.Enabled = false;
-            UnityEngine.Object.FindObjectOfType<Engine>().StartLoading(message);
-        }
-
-        private static void StopLoading(string message, bool error = false)
-        {
-            UnityEngine.Object.FindObjectOfType<Intro>().StartButton.Enabled = !error;
-            UnityEngine.Object.FindObjectOfType<Engine>().StopLoading(message);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Assets.Scripts.Views
             }
 
             Url = companyInfo.Url;
-            Icon.spriteName = companyInfo.Icon;
+            Icon.spriteName = companyInfo.Name;
             Navigate.Enabled = companyInfo.Url != null;
         }
     }

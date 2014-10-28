@@ -2,12 +2,12 @@
 {
     public class CompanyInfo
     {
-        public string Icon;
+        public string Name;
         public string Url;
 
-        public CompanyInfo(string icon, string url)
+        public CompanyInfo(string name, string url)
         {
-            Icon = icon;
+            Name = name;
             Url = url;
         }
     }

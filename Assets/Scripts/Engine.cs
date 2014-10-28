@@ -15,6 +15,7 @@ namespace Assets.Scripts
 
         public void Start()
         {
+            //PlayerPrefs.DeleteAll(); // TODO:
             Profile.Load();
             ViewBase.Current = GetComponent<Intro>();
         }
@@ -73,8 +74,31 @@ namespace Assets.Scripts
 
         public void Begin()
         {
-            GetComponent<Form>().Open(TweenDirection.Right);
-            Status.SetText(null);
+            if (Profile.NeedSync)
+            {
+                StartLoading("обновление данных...");
+                TaskScheduler.CreateTask(ScheduledUpdate, 1);
+            }
+            else
+            {
+                GetComponent<Form>().Open(TweenDirection.Right);
+                Status.SetText(null);
+            }
+        }
+
+        private void ScheduledUpdate()
+        {
+            try
+            {
+                Profile.Sync();
+                Profile.Load();
+                StopLoading("данные успешно обновлены");
+                TaskScheduler.CreateTask(Begin, 1);
+            }
+            catch (Exception e)
+            {
+                StopLoading(string.Format("Ошибка подключения к API: {0}", e.Message));
+            }
         }
 
         public void SelectCar()
@@ -150,7 +174,6 @@ namespace Assets.Scripts
         public void StartLoading(string message)
         {
             Debug.Log(message);
-
             Status.SetText(message);
             Loading = true;
         }
