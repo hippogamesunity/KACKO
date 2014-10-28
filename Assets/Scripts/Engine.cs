@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System;
 using System.Linq;
 using Assets.Scripts.Common;
 using Assets.Scripts.Views;
@@ -82,19 +82,19 @@ namespace Assets.Scripts
             FindObjectOfType<Makes>().Open(TweenDirection.Right);
         }
 
-        public void SelectMake(int id)
+        public void SelectMake(string make)
         {
-            Profile.Make = id;
+            Profile.Make = make;
             GetComponent<Models>().Open(TweenDirection.Right);
         }
 
-        public void SelectModel(int model)
+        public void SelectModel(string model)
         {
             Profile.Model = model;
             GetComponent<Years>().Open(TweenDirection.Right);
 
-            var models = Profile.Cars.Childs.Single(i => int.Parse(i["id"].Value) == Profile.Make)["models"];
-            var car = models.Childs.Single(i => int.Parse(i["id"]) == Profile.Model);
+            var models = Profile.Cars.Childs.Single(i => i["name"].Value == Profile.Make)["models"];
+            var car = models.Childs.Single(i => i["name"].Value == Profile.Model);
             var price = int.Parse(car["price"]);
             var power = int.Parse(car["power"]);
 
@@ -132,37 +132,19 @@ namespace Assets.Scripts
 
         public void ChangeSex()
         {
-            Profile.Sex = Profile.Sex == 1 ? 2 : 1;
+            Profile.Sex = Profile.Sex == "m" ? "w" : "m";
             Profile.Save();
-            GetComponent<Form>().Sex.text = Profile.Sex == 1 ? "М" : "Ж";
+            GetComponent<Form>().Sex.text = Profile.Sex == "m" ? "М" : "Ж";
         }
 
         public void CalcOsago()
         {
-            StartLoading("выполняется расчет ОСАГО...");
-
-            var calc = JSON.Parse(File.ReadAllText(@"d:\kasko.json"));
-
-            TaskScheduler.CreateTask(() =>
-            {
-                StopLoading(null);
-                GetComponent<Results>().Initialize(Profile.Companies, calc);
-                GetComponent<Results>().Open(TweenDirection.Right);
-            }, 2);
+            Calc(osago: true);
         }
 
         public void CalcKasko()
         {
-            StartLoading("выполняется расчет КАСКО...");
-
-            var calc = JSON.Parse(File.ReadAllText(@"d:\kasko.json"));
-
-            TaskScheduler.CreateTask(() =>
-            {
-                StopLoading(null);
-                GetComponent<Results>().Initialize(Profile.Companies, calc);
-                GetComponent<Results>().Open(TweenDirection.Right);
-            }, 2);
+            Calc(osago: false);
         }
 
         public void StartLoading(string message)
@@ -177,6 +159,99 @@ namespace Assets.Scripts
         {
             Status.SetText(message);
             Loading = false;
+        }
+
+        private static string GetRequestJson()
+        {
+            var car = new JSONClass
+            {
+                { "make", new JSONData(Profile.Make) },
+                { "model", new JSONData(Profile.Model) },
+                { "year", new JSONData(Profile.Year) },
+                { "power", new JSONData(Profile.Power) },
+                { "price", new JSONData(Profile.Price) },
+                { "drivers", new JSONArray
+                    {
+                        new JSONClass
+                        {
+                            { "age", new JSONData(Profile.Age) },
+                            { "experience", new JSONData(Profile.Exp) },
+                            { "sex", new JSONData(Profile.Sex) },
+                            { "marriage", new JSONData(false) }
+                        }
+                    }
+                },
+            };
+
+            return car.ToString();
+        }
+
+        public static string GetMakeId(string make)
+        {
+            try
+            {
+                return Profile.Cars.Childs.Single(i => i["name"].Value == Profile.Make)["id"].Value;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static string GetModelId(string make)
+        {
+            try
+            {
+                return Profile.Cars.Childs.Single(i => i["name"].Value == Profile.Make)["models"].Childs
+                    .Single(i => i["name"].Value == Profile.Model).Value;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private void Calc(bool osago)
+        {
+            StartLoading(string.Format("выполняется расчет {0}...", osago ? "ОСАГО" : "КАСКО"));
+            TaskScheduler.CreateTask(() => DelayedCalc(osago), 2);
+        }
+
+        private void DelayedCalc(bool osago)
+        {
+            try
+            {
+                var request = GetRequestJson();
+                var cache = Profile.GetResult(request);
+                JSONNode calc;
+
+                if (cache != null)
+                {
+                    calc = JSON.Parse(cache);
+                }
+                else
+                {
+                    var result = CalcApi.Calc(request, Profile.ApiKey);
+
+                    Profile.SaveResult(request, result);
+
+                    calc = JSON.Parse(result);
+                }
+
+                GetComponent<Results>().Initialize(Profile.Companies, calc, osago);
+
+                TaskScheduler.CreateTask(OpenResults, cache == null ? 1 : 0);
+            }
+            catch (Exception e)
+            {
+                StopLoading(string.Format("Ошибка подключения к API: {0}", e.Message));
+            }
+        }
+
+        private void OpenResults()
+        {
+            StopLoading(null);
+            GetComponent<Results>().Open(TweenDirection.Right);
         }
     }
 }

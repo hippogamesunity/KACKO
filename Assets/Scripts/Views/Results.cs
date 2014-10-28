@@ -13,7 +13,7 @@ namespace Assets.Scripts.Views
         protected override Vector2 Step { get { return new Vector2(170, 200); } }
         protected override Vector2 Position { get { return new Vector2(170, 380); } }
 
-        public void Initialize(JSONNode companies, JSONNode calc)
+        public void Initialize(JSONNode companies, JSONNode calc, bool osago = false)
         {
             var results = new List<Result>();
 
@@ -39,12 +39,23 @@ namespace Assets.Scripts.Views
                     CompanyName = companyName.Value,
                     CompanyShortName = companyShortName.Value,
                     Rating = int.Parse(companyRating.Value),
-                    Price = int.Parse(price.Value.Split(Convert.ToChar("."))[0]),
+                    Price = GetPrice(price),
                     Regions = regions
                 });
             }
 
-            results = results.OrderBy(i => i.Price).ToList();
+            if (osago)
+            {
+                var price = GetPrice(calc["results"].Childs
+                    .Single(i => i["info"]["code"].Value == "OSAGO")["result"]["total"]["premium"]);
+
+                results.ForEach(i => i.Price = price);
+                results = results.OrderByDescending(i => i.Rating).ToList();
+            }
+            else
+            {
+                results = results.OrderBy(i => i.Price).ToList();
+            }
 
             CreatePages(Mathf.CeilToInt(results.Count / (Size.x * Size.y)));
 
@@ -84,5 +95,10 @@ namespace Assets.Scripts.Views
         {
             new CompanyInfo("Default", null)
         };
+
+        private static int GetPrice(JSONNode node)
+        {
+            return int.Parse(node.Value.Split(Convert.ToChar("."))[0]);
+        }
     }
 }

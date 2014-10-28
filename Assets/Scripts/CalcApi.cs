@@ -9,6 +9,7 @@ namespace Assets.Scripts
     {
         private const string ApiUrl = "http://pkasko.ru";
         private const string UserAgent = "Mozilla/5.0 (compatible; PkaskoApiClient/1.0; +http://pkasko.ru)";
+        private const int Timeout = 30000;
         
         public static string GetApiKey(string login, string password)
         {
@@ -25,13 +26,43 @@ namespace Assets.Scripts
             return GetResponse(apiKey, "/calcservice/companies");
         }
 
+        public static string Calc(string car, string apiKey)
+        {
+            return PostResponse(car, apiKey, "/kasko/calc?api=1");
+        }
+
+        public static string CalcOsago(string car, string apiKey)
+        {
+            return PostResponse(car, apiKey, "/kasko/options?code=OSAGO");
+        }
+
+        private static string PostResponse(string car, string apiKey, string path)
+        {
+            var url = string.Format("{0}{1}", ApiUrl, path);
+            var request = (HttpWebRequest) WebRequest.Create(url);
+            var bytes = Encoding.UTF8.GetBytes(car);
+
+            request.UserAgent = UserAgent;
+            request.Timeout = Timeout;
+            request.Headers.Add("X-Authorization", apiKey);
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = bytes.Length;
+
+            using (var stream = request.GetRequestStream())
+            {
+                stream.Write(bytes, 0, bytes.Length);
+            }
+
+            return ReadResponse(request);
+        }
 
         private static string GetResponse(string apiKey, string path)
         {
             var url = string.Format("{0}{1}", ApiUrl, path);
 
             var request = (HttpWebRequest) WebRequest.Create(url);
-            request.Timeout = 10 * 1000;
+            request.Timeout = Timeout;
             request.UserAgent = UserAgent;
 
             if (apiKey != null)
@@ -39,6 +70,11 @@ namespace Assets.Scripts
                 request.Headers.Add("X-Authorization", apiKey);
             }
 
+            return ReadResponse(request);
+        }
+
+        private static string ReadResponse(WebRequest request)
+        {
             var response = (HttpWebResponse) request.GetResponse();
 
             if (response.StatusCode != HttpStatusCode.OK)

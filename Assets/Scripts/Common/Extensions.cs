@@ -8,12 +8,12 @@ namespace Assets.Scripts.Common
     {
         public static string ToPriceLong(this long value)
         {
-            return string.Format("{0,2:N0}", value).Replace(",", ".").Replace(" ", "");
+            return string.Format("{0,2:N0}", value).Replace(" ", "").Replace(",", " ");
         }
 
         public static string ToPriceInt(this int value)
         {
-            return string.Format("{0,2:N0}", value).Replace(",", ".").Replace(" ", "");
+            return string.Format("{0,2:N0}", value).Replace(" ", "").Replace(",", " ");
         }
 
         public static void SetText(this UILabel label, string text, params object[] args)

@@ -26,7 +26,7 @@ namespace Assets.Scripts.Views
             }
         }
 
-        private static readonly List<string> RegionList = new List<string>
+        public static readonly List<string> RegionList = new List<string>
         {
             AnyRegion,
             "Москва",
