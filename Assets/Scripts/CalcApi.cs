@@ -9,7 +9,7 @@ namespace Assets.Scripts
     {
         private const string ApiUrl = "http://pkasko.ru";
         private const string UserAgent = "Mozilla/5.0 (compatible; PkaskoApiClient/1.0; +http://pkasko.ru)";
-        private const int Timeout = 30000;
+        private const int Timeout = 60000;
         
         public static string GetApiKey(string login, string password)
         {
@@ -79,14 +79,14 @@ namespace Assets.Scripts
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new Exception("Response status code: " + response.StatusCode);
+                throw new Exception("response status code: " + response.StatusCode);
             }
 
             using (var stream = response.GetResponseStream())
             {
                 if (stream == null)
                 {
-                    throw new Exception("Пустой ответ от сервера");
+                    throw new Exception("пустой ответ от сервера");
                 }
 
                 var reader = new StreamReader(stream, Encoding.UTF8);
@@ -94,7 +94,7 @@ namespace Assets.Scripts
 
                 if (responseString.Contains("<!DOCTYPE html>"))
                 {
-                    throw new Exception("Некорректный ключ API");
+                    throw new ApiKeyException("некорректный ключ API");
                 }
 
                 return responseString;

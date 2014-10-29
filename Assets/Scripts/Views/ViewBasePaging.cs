@@ -15,6 +15,22 @@ namespace Assets.Scripts.Views
         protected virtual Vector2 Step { get { return new Vector2(180, 45); } }
         protected virtual Vector2 Position { get { return new Vector2(250, 430); } }
 
+        public void SlideRight()
+        {
+            if (Index > 0)
+            {
+                Pagings[Index - 1].GetComponent<SelectButton>().Pressed = true;
+            }
+        }
+
+        public void SlideLeft()
+        {
+            if (Index < Pagings.Count - 1)
+            {
+                Pagings[Index + 1].GetComponent<SelectButton>().Pressed = true;
+            }
+        }
+
         protected void CreatePages(int count)
         {
             foreach (var pages in Pages)

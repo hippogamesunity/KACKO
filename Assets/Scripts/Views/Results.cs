@@ -22,17 +22,19 @@ namespace Assets.Scripts.Views
                 var result = calc["results"][k];
                 var price = result["result"]["total"]["premium"];
                 var regions = result["values"]["region"].Childs.Select(i => i.Value).ToList();
-
-                if (Profile.Region != Regions.AnyRegion && !regions.Contains(Profile.Region)) continue;
-
                 var companyCode = result["info"]["code"];
                 var company = companies.Childs.FirstOrDefault(i => i["calculators"].Childs.Any(j => j["code"].Value == companyCode.Value));
 
                 if (company == null) continue;
 
                 var companyName = company["name"];
+
+                if (LocalDatabase.BadCompanies.Contains(companyName.Value)) continue;
+
                 var companyShortName = company["nameshort"];
                 var companyRating = company["rating"];
+
+                if (SkipByRegion(regions, companyName)) continue;
 
                 results.Add(new Result
                 {
@@ -85,47 +87,38 @@ namespace Assets.Scripts.Views
 
         public static CompanyInfo GetCompanyInfo(string company)
         {
-            var companyInfo = KnownCompanies.FirstOrDefault(i => i.Name == company);
+            var companyInfo = LocalDatabase.KnownCompanies.FirstOrDefault(i => i.Name == company);
 
-            return companyInfo ?? KnownCompanies[0];
+            return companyInfo ?? LocalDatabase.KnownCompanies[0];
         }
 
-        private static readonly List<CompanyInfo> KnownCompanies = new List<CompanyInfo>
+        private static bool SkipByRegion(List<string> regions, string companyName)
         {
-            new CompanyInfo("Default", null),
-            new CompanyInfo("Allianz", "http://www.allianz.ru/"),
-            new CompanyInfo("АМКОполис", "http://www.sk-amko.ru/"),
-            new CompanyInfo("Алроса", "http://www.ic-alrosa.ru/"),
-            new CompanyInfo("Альфа-Страхование", "http://www.alfastrah.ru/"),
-            new CompanyInfo("Британский Страховой Дом", "http://bihouse.ru/"),
-            new CompanyInfo("ВСК Страховой Дом", "http://www.vsk.ru/"),
-            new CompanyInfo("ВТБ", "http://www.vtbins.ru/"),
-            new CompanyInfo("Гайде", "http://www.guideh.com/"),
-            new CompanyInfo("Геополис", "http://www.geopolis.ru/"),
-            new CompanyInfo("Гефест", "http://www.gefest.ru/"),
-            new CompanyInfo("ЖАСО", "http://www.zhaso.ru/"),
-            new CompanyInfo("Инвест-Альянс", "http://ins-invest.ru/"),
-            new CompanyInfo("Ингосстрах", "http://www.ingos.ru/ru/"),
-            new CompanyInfo("Компаньон", "http://companion-group.ru/"),
-            new CompanyInfo("Купеческое", "http://www.kupecheskoe.ru/"),
-            new CompanyInfo("Либерти Страхование (бывший КИТ Финанс)", "http://www.liberty24.ru/"),
-            new CompanyInfo("МАКС", "http://www.makc.ru/"),
-            new CompanyInfo("НАСКО", "http://nasko.ru/"),
-            new CompanyInfo("Объединённая Страховая Компания", "http://www.osk-ins.ru/"),
-            new CompanyInfo("Оранта Страхование", "http://www.oranta-sk.ru/"),
-            new CompanyInfo("РЕСО-Гарантия", "http://www.reso.ru/"),
-            new CompanyInfo("Ренессанс", "http://www.renins.com/"),
-            new CompanyInfo("Росгосстрах", "http://www.rgs.ru/"),
-            new CompanyInfo("СГ Московская Страховая Компания", "http://sgmsk.ru/"),
-            new CompanyInfo("СОГАЗ", "http://www.sogaz.ru/"),
-            new CompanyInfo("Северная Казна", "http://www.kazna.com/"),
-            new CompanyInfo("Согласие", "http://www.soglasie.ru/"),
-            new CompanyInfo("Сургутнефтегаз", "https://www.sngi.ru/"),
-            new CompanyInfo("УралСиб", "http://www.uralsibins.ru"),
-            new CompanyInfo("Цюрих", "http://www.zurich.ru/"),
-            new CompanyInfo("Энергогарант", "http://www.energogarant.ru/"),
-            new CompanyInfo("Эрго Русь", "http://www.ergorussia.ru/")
-        };
+            if (Profile.Region == Regions.AnyRegion)
+            {
+                return false;
+            }
+
+            if (LocalDatabase.CompanyAdditionalRegions.ContainsKey(companyName))
+            {
+                regions.AddRange(LocalDatabase.CompanyAdditionalRegions[companyName]);
+            }
+
+            foreach (var region in regions)
+            {
+                foreach (var r in LocalDatabase.RegionList.Single(i => i.Contains(Profile.Region)))
+                {
+                    if (region.Contains(r))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            Debug.Log("SkipByRegion: " + companyName + " = " + string.Join(", ", regions.ToArray()));
+
+            return true;
+        }
 
         private static int GetPrice(JSONNode node)
         {

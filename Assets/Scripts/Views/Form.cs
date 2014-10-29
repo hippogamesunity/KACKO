@@ -22,6 +22,11 @@ namespace Assets.Scripts.Views
             ValidateForm();
         }
 
+        protected override void Cleanup()
+        {
+            GetComponent<Engine>().Status.SetText(null);
+        }   
+
         public void Update()
         {
             OsagoButton.Enabled = KaskoButton.Enabled =
@@ -61,9 +66,9 @@ namespace Assets.Scripts.Views
             {
                 new EventDelegate(() =>
                 {
-                    var price = Math.Min(100000, int.Parse(Price.value));
+                    var price = Math.Max(100000, int.Parse(Price.value));
 
-                    price = Math.Max(99999999, price);
+                    price = Math.Min(99999999, price);
 
                     Profile.Price = price;
                     Profile.Save();
@@ -75,9 +80,9 @@ namespace Assets.Scripts.Views
             {
                 new EventDelegate(() =>
                 {
-                    var power = Math.Min(999, int.Parse(Power.value));
+                    var power = Math.Max(999, int.Parse(Power.value));
 
-                    power = Math.Max(60, power);
+                    power = Math.Min(60, power);
 
                     Profile.Power = power;
                     Profile.Save();
@@ -89,9 +94,9 @@ namespace Assets.Scripts.Views
             {
                 new EventDelegate(() =>
                 {
-                    var age = Math.Min(16, int.Parse(Age.value));
+                    var age = Math.Max(16, int.Parse(Age.value));
 
-                    age = Math.Max(99, age);
+                    age = Math.Min(99, age);
 
                     Profile.Age = age;
                     Profile.Save();
@@ -103,9 +108,9 @@ namespace Assets.Scripts.Views
             {
                 new EventDelegate(() =>
                 {
-                    var exp = Math.Min(0, int.Parse(Exp.value));
+                    var exp = Math.Max(0, int.Parse(Exp.value));
 
-                    exp = Math.Max(99, exp);
+                    exp = Math.Min(99, exp);
 
                     Profile.Exp = exp;
                     Profile.Save();

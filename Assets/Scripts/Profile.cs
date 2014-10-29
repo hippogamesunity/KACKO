@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Assets.Scripts.Common;
 using Assets.Scripts.Views;
 using SimpleJSON;
@@ -18,6 +19,7 @@ namespace Assets.Scripts
         public const string Sex = "Sex";
         public const string Age = "Age";
         public const string Exp = "Exp";
+        public const string Donate = "Donate";
 
         public const string Timestamp = "Timestamp";
         public const string ApiKey = "ApiKey";
@@ -44,6 +46,7 @@ namespace Assets.Scripts
         public static string Sex;
         public static int Age;
         public static int Exp;
+        public static int Donate;
 
         private const string Login = "mYhx2YytWYulmY392ZtFXZAN2Zh1Wauw2Yt9";
         private const string Password = "Xcldnc6RTMzIAN==";
@@ -96,7 +99,6 @@ namespace Assets.Scripts
 
         public static void Save()
         {
-            Debug.Log("saving" + Make);
             PlayerPrefs.SetString(Keys.Make, Make);
             PlayerPrefs.SetString(Keys.Model, Model);
             PlayerPrefs.SetInt(Keys.Year, Year);
@@ -120,7 +122,6 @@ namespace Assets.Scripts
 
         public static string GetResult(string request)
         {
-            Debug.Log(CachePath);
             if (PlayerPrefs.GetString(Keys.LastRequest) == request
                 && (DateTime.UtcNow - DateTime.Parse(PlayerPrefs.GetString(Keys.LastResultTimestamp))).TotalHours < 24
                 && File.Exists(CachePath))
@@ -175,6 +176,10 @@ namespace Assets.Scripts
             Exp = PlayerPrefs.HasKey(Keys.Exp)
                 ? PlayerPrefs.GetInt(Keys.Exp)
                 : 5;
+
+            Donate = PlayerPrefs.HasKey(Keys.Donate)
+                ? PlayerPrefs.GetInt(Keys.Donate)
+                : 0;
         }
 
         private static void Verify()
@@ -186,7 +191,7 @@ namespace Assets.Scripts
                 Save();
             }
 
-            if (!Regions.RegionList.Contains(Region))
+            if (!LocalDatabase.RegionList.Any(i => i.Contains(Region)))
             {
                 Region = null;
                 Save();

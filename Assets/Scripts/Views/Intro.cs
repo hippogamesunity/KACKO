@@ -1,4 +1,6 @@
-﻿namespace Assets.Scripts.Views
+﻿using Assets.Scripts.Common;
+
+namespace Assets.Scripts.Views
 {
     public class Intro : ViewBase
     {

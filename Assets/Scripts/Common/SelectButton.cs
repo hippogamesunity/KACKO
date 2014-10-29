@@ -1,55 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class SelectButton : GameButton
+namespace Assets.Scripts.Common
 {
-    public event Action Selected = () => { };
-    public event Action Confirmed = () => { };
-
-    public int Tag = 0;
-    private static readonly SortedDictionary<int, SelectButton> SelectedButtons = new SortedDictionary<int, SelectButton>();
-
-    public bool Pressed
+    public class SelectButton : GameButton
     {
-        get { return SelectedButtons.ContainsKey(Tag) && SelectedButtons[Tag] == this; }
-        set { if (value) Select(); else Unselect(); }
-    }
+        public event Action Selected = () => { };
+        public event Action Confirmed = () => { };
 
-    protected override void OnPress(bool down)
-    {
-        if (!enabled || !down || Pressed) return;
+        public int Tag = 0;
+        private static readonly SortedDictionary<int, SelectButton> SelectedButtons = new SortedDictionary<int, SelectButton>();
 
-        Select();
-    }
-
-    private void Select()
-    {
-        ActionUp();
-        Selected();
-
-        if (SelectedButtons.ContainsKey(Tag))
+        public bool Pressed
         {
-            if (SelectedButtons[Tag] == this)
-            {
-                Confirmed();
-            }
-            else if (SelectedButtons[Tag] != null)
-            {
-                SelectedButtons[Tag].Tween(false);
-            }
+            get { return SelectedButtons.ContainsKey(Tag) && SelectedButtons[Tag] == this; }
+            set { if (value) Select(); else Unselect(); }
         }
 
-        SelectedButtons[Tag] = this;
-        Tween(true);
-    }
-
-    private void Unselect()
-    {
-        if (SelectedButtons.ContainsKey(Tag) && SelectedButtons[Tag] == this)
+        protected override void OnPress(bool down)
         {
-            SelectedButtons.Remove(Tag);
+            if (!enabled || !down || Pressed) return;
+
+            Select();
         }
 
-        Tween(false);
+        private void Select()
+        {
+            ActionUp();
+            Selected();
+
+            if (SelectedButtons.ContainsKey(Tag))
+            {
+                if (SelectedButtons[Tag] == this)
+                {
+                    Confirmed();
+                }
+                else if (SelectedButtons[Tag] != null)
+                {
+                    SelectedButtons[Tag].Tween(false);
+                }
+            }
+
+            SelectedButtons[Tag] = this;
+            Tween(true);
+        }
+
+        private void Unselect()
+        {
+            if (SelectedButtons.ContainsKey(Tag) && SelectedButtons[Tag] == this)
+            {
+                SelectedButtons.Remove(Tag);
+            }
+
+            Tween(false);
+        }
     }
 }

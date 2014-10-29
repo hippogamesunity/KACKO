@@ -18,6 +18,7 @@ namespace Assets.Scripts
             //PlayerPrefs.DeleteAll(); // TODO:
             Profile.Load();
             ViewBase.Current = GetComponent<Intro>();
+            GetComponent<GameShop>().Refresh();
         }
 
         public void Update()
@@ -163,12 +164,12 @@ namespace Assets.Scripts
 
         public void CalcOsago()
         {
-            Calc(osago: true);
+            StartCalculate(osago: true);
         }
 
         public void CalcKasko()
         {
-            Calc(osago: false);
+            StartCalculate(osago: false);
         }
 
         public void StartLoading(string message)
@@ -206,6 +207,8 @@ namespace Assets.Scripts
                 },
             };
 
+            Debug.Log(car);
+
             return car.ToString();
         }
 
@@ -234,13 +237,40 @@ namespace Assets.Scripts
             }
         }
 
-        private void Calc(bool osago)
+        private void StartCalculate(bool osago)
         {
             StartLoading(string.Format("выполняется расчет {0}...", osago ? "ОСАГО" : "КАСКО"));
-            TaskScheduler.CreateTask(() => DelayedCalc(osago), 2);
+            TaskScheduler.CreateTask(() => DelayedCalculate(osago), 1);
         }
 
-        private void DelayedCalc(bool osago)
+        private void DelayedCalculate(bool osago)
+        {
+            var exception = TryCalculate(osago);
+
+            if (exception == null)
+            {
+                return;
+            }
+
+            if (exception is ApiKeyException)
+            {
+                try
+                {
+                    Profile.Sync();
+                    TryCalculate(osago);
+                }
+                catch (Exception e)
+                {
+                    ShowException(e);
+                }
+            }
+            else
+            {
+                ShowException(exception);
+            }
+        }
+
+        private Exception TryCalculate(bool osago)
         {
             try
             {
@@ -267,8 +297,21 @@ namespace Assets.Scripts
             }
             catch (Exception e)
             {
-                StopLoading(string.Format("Ошибка подключения к API: {0}", e.Message));
+                return e;
             }
+
+            return null;
+        }
+
+        private void ShowException(Exception exception)
+        {
+            const string errorPattern = "ошибка подключения к API: {0}";
+            var message = exception.Message;
+
+            message = message.Replace("Error: NameResolutionFailure", "не удалось установить соединение с сервером");
+            message = message.Replace("The request timed out", "превышен интервал ожидания для запроса");
+
+            StopLoading(string.Format(errorPattern, message));
         }
 
         private void OpenResults()

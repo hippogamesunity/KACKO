@@ -1,4 +1,6 @@
-﻿namespace Assets.Scripts
+﻿using Assets.Scripts.Common;
+
+namespace Assets.Scripts
 {
     public class CompanyButton : Script
     {
