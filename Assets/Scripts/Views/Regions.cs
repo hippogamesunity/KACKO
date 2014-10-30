@@ -25,6 +25,11 @@ namespace Assets.Scripts.Views
                 instance.GetComponent<GameButton>().Up += () => GetComponent<Engine>().SelectRegion(region);
                 instance.transform.localPosition =
                     new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
+
+                if (i >= 2)
+                {
+                    instance.GetComponent<GameButton>().Enabled = false;
+                }
             }
         }
     }

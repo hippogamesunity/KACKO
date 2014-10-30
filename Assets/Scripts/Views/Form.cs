@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Assets.Scripts.Common;
 
 namespace Assets.Scripts.Views
@@ -81,9 +80,9 @@ namespace Assets.Scripts.Views
             {
                 new EventDelegate(() =>
                 {
-                    var power = Math.Max(999, int.Parse(Power.value));
+                    var power = Math.Max(60, int.Parse(Power.value));
 
-                    power = Math.Min(60, power);
+                    power = Math.Min(999, power);
 
                     Profile.Power = power;
                     Profile.Save();

@@ -98,6 +98,7 @@ namespace Assets.Scripts
             }
             catch (Exception e)
             {
+                Debug.Log(e);
                 StopLoading(string.Format("Ошибка подключения к API: {0}", e.Message));
             }
         }
@@ -237,6 +238,11 @@ namespace Assets.Scripts
             }
         }
 
+        public void OpenStore()
+        {
+            Application.OpenURL(PlanformDependedSettings.StoreLink);
+        }
+
         private void StartCalculate(bool osago)
         {
             StartLoading(string.Format("выполняется расчет {0}...", osago ? "ОСАГО" : "КАСКО"));
@@ -305,6 +311,8 @@ namespace Assets.Scripts
 
         private void ShowException(Exception exception)
         {
+            Debug.Log(exception);
+
             const string errorPattern = "ошибка подключения к API: {0}";
             var message = exception.Message;
 

@@ -21,9 +21,17 @@ namespace Assets.Scripts.Views
             for (var k = 0; k < calc["results"].Count; k++)
             {
                 var result = calc["results"][k];
+                var companyCode = result["info"]["code"];
+
+                if (result["error"].Count > 0)
+                {
+                    LogFormat("Error in {0}: {1}", companyCode.Value, result["error"]["message"]);
+
+                    continue;
+                }
+
                 var price = result["result"]["total"]["premium"];
                 var regions = result["values"]["region"].ToList<string>();
-                var companyCode = result["info"]["code"];
                 var company = companies.Childs.FirstOrDefault(i => i["calculators"].Childs.Any(j => j["code"].Value == companyCode.Value));
 
                 if (company == null) continue;
@@ -41,15 +49,15 @@ namespace Assets.Scripts.Views
                 {
                     CompanyName = companyName.Value,
                     CompanyShortName = companyShortName.Value,
-                    Rating = int.Parse(companyRating.Value),
-                    Price = GetPrice(price),
+                    Rating = GetInt(companyRating),
+                    Price = GetInt(price),
                     Regions = regions
                 });
             }
 
             if (osago)
             {
-                var price = GetPrice(calc["results"].Childs.Single(i => i["info"]["code"].Value == "OSAGO")["result"]["total"]["premium"]);
+                var price = GetInt(calc["results"].Childs.Single(i => i["info"]["code"].Value == "OSAGO")["result"]["total"]["premium"]);
 
                 results.ForEach(i => i.Price = price);
                 results = results.OrderByDescending(i => i.Rating).ToList();
@@ -117,9 +125,16 @@ namespace Assets.Scripts.Views
             return true;
         }
 
-        private static int GetPrice(JSONNode node)
+        private static int GetInt(JSONNode node)
         {
-            return int.Parse(node.Value.Split(Convert.ToChar("."))[0]);
+            try
+            {
+                return int.Parse(node.Value.Split(Convert.ToChar("."))[0]);
+            }
+            catch
+            {
+                return 0;
+            }
         }
     }
 }
