@@ -9,14 +9,16 @@ namespace Assets.Scripts.Views
 
         protected override void Initialize()
         {
-            CreatePages(Mathf.CeilToInt(LocalDatabase.RegionList.Count / (Size.x * Size.y)));
+            var regions = LocalDatabase.Data["regions"];
 
-            for (var i = 0; i < LocalDatabase.RegionList.Count; i++)
+            CreatePages(Mathf.CeilToInt(regions.Count / (Size.x * Size.y)));
+
+            for (var i = 0; i < regions.Count; i++)
             {
                 var page = (int) Mathf.Floor(i / (Size.x * Size.y));
                 var j = i % (Size.x * Size.y);
                 var instance = PrefabsHelper.InstantiateLink(Pages[page].transform);
-                var region = LocalDatabase.RegionList[i][0];
+                var region = regions[i][0];
 
                 instance.name = region;
                 instance.GetComponent<UILabel>().text = region;

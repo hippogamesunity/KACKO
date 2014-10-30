@@ -1,9 +1,10 @@
 ﻿using Assets.Scripts.Common;
+using SimpleJSON;
 using UnityEngine;
 
 namespace Assets.Scripts.Views
 {
-    public class Company : ViewBase
+    public class CompanyResult : ViewBase
     {
         public UILabel Name;
         public UISprite Icon;
@@ -17,7 +18,7 @@ namespace Assets.Scripts.Views
             Navigate.Up += () => Application.OpenURL(Url);
         }
 
-        public void Initialize(Result result, CompanyInfo companyInfo)
+        public void Initialize(Result result, JSONNode company)
         {
             Name.SetText(result.CompanyName);
             Price.SetText("{0} руб.", result.Price.ToPriceInt());
@@ -29,9 +30,9 @@ namespace Assets.Scripts.Views
                     : ColorHelper.GetColor(0, 0, 0, 100);
             }
 
-            Url = companyInfo.Url;
-            Icon.spriteName = companyInfo.Name;
-            Navigate.Enabled = companyInfo.Url != null;
+            Url = company["site"].Value;
+            Icon.spriteName = company["icon"].Value;
+            Navigate.Enabled = company["site"].Value != "";
         }
     }
 }

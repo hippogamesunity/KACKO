@@ -15,6 +15,11 @@ namespace Assets.Scripts.Views
         protected virtual Vector2 Step { get { return new Vector2(180, 45); } }
         protected virtual Vector2 Position { get { return new Vector2(250, 430); } }
 
+        protected override void Initialize()
+        {
+            Index = 0;
+        }
+
         public void SlideRight()
         {
             if (Index > 0)

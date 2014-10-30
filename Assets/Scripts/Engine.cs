@@ -53,7 +53,7 @@ namespace Assets.Scripts
                 {
                     GetComponent<Form>().Open(TweenDirection.Left);
                 }
-                else if (ViewBase.Current is Company)
+                else if (ViewBase.Current is CompanyResult)
                 {
                     GetComponent<Results>().Open(TweenDirection.Left);
                 }
@@ -174,7 +174,7 @@ namespace Assets.Scripts
 
         public void StartLoading(string message)
         {
-            Debug.Log(message);
+            LogFormat(message);
             Status.SetText(message);
             Loading = true;
         }
@@ -187,7 +187,7 @@ namespace Assets.Scripts
 
         private static string GetRequestJson()
         {
-            var car = new JSONClass
+            var request = new JSONClass
             {
                 { "make", new JSONData(Profile.Make) },
                 { "model", new JSONData(Profile.Model) },
@@ -205,11 +205,11 @@ namespace Assets.Scripts
                         }
                     }
                 },
-            };
+            }.ToString();
 
-            Debug.Log(car);
+            Debug.Log("Request json: " + request);
 
-            return car.ToString();
+            return request;
         }
 
         public static string GetMakeId(string make)

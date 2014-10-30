@@ -16,12 +16,13 @@ namespace Assets.Scripts.Views
         public void Initialize(JSONNode companies, JSONNode calc, bool osago = false)
         {
             var results = new List<Result>();
+            var skip = LocalDatabase.Data["skip"].ToList<string>();
 
             for (var k = 0; k < calc["results"].Count; k++)
             {
                 var result = calc["results"][k];
                 var price = result["result"]["total"]["premium"];
-                var regions = result["values"]["region"].Childs.Select(i => i.Value).ToList();
+                var regions = result["values"]["region"].ToList<string>();
                 var companyCode = result["info"]["code"];
                 var company = companies.Childs.FirstOrDefault(i => i["calculators"].Childs.Any(j => j["code"].Value == companyCode.Value));
 
@@ -29,7 +30,7 @@ namespace Assets.Scripts.Views
 
                 var companyName = company["name"];
 
-                if (LocalDatabase.BadCompanies.Contains(companyName.Value)) continue;
+                if (skip.Contains(companyName.Value)) continue;
 
                 var companyShortName = company["nameshort"];
                 var companyRating = company["rating"];
@@ -48,8 +49,7 @@ namespace Assets.Scripts.Views
 
             if (osago)
             {
-                var price = GetPrice(calc["results"].Childs
-                    .Single(i => i["info"]["code"].Value == "OSAGO")["result"]["total"]["premium"]);
+                var price = GetPrice(calc["results"].Childs.Single(i => i["info"]["code"].Value == "OSAGO")["result"]["total"]["premium"]);
 
                 results.ForEach(i => i.Price = price);
                 results = results.OrderByDescending(i => i.Rating).ToList();
@@ -67,29 +67,28 @@ namespace Assets.Scripts.Views
                 var j = i % (Size.x * Size.y);
                 var instance = PrefabsHelper.InstantiateCompanyButton(Pages[page].transform);
                 var companyButton = instance.GetComponent<CompanyButton>();
-
                 var result = results.ElementAt(i);
-                var companyInfo = GetCompanyInfo(result.CompanyName);
+                var company = GetCompany(result.CompanyName);
 
-                companyButton.Name.SetText(result.CompanyName);
-                companyButton.Price.SetText(result.Price.ToPriceInt());
-                companyButton.Icon.spriteName = companyInfo.Name;
+                companyButton.Name.SetText(result.CompanyShortName);
+                companyButton.Price.SetText(result.Price > 0 ? result.Price.ToPriceInt() : "?");
+                companyButton.Icon.spriteName = company["icon"].Value;
                 companyButton.Button.Up += () =>
                 {
-                    var company = GetComponent<Company>();
+                    var companyResult = GetComponent<CompanyResult>();
 
-                    company.Initialize(result, companyInfo);
-                    company.Open(TweenDirection.Right);
+                    companyResult.Initialize(result, company);
+                    companyResult.Open(TweenDirection.Right);
                 };
                 instance.transform.localPosition = new Vector2(i % 3 * Step.x - Position.x, Position.y - Mathf.Floor(j / Size.x) * Step.y);
             }
         }
 
-        public static CompanyInfo GetCompanyInfo(string company)
+        public static JSONNode GetCompany(string companyName)
         {
-            var companyInfo = LocalDatabase.KnownCompanies.FirstOrDefault(i => i.Name == company);
+            var companyInfo = LocalDatabase.Data["companies"][companyName];
 
-            return companyInfo ?? LocalDatabase.KnownCompanies[0];
+            return companyInfo.Count > 0 ? companyInfo : new JSONClass { { "icon", "Default" } };
         }
 
         private static bool SkipByRegion(List<string> regions, string companyName)
@@ -99,23 +98,21 @@ namespace Assets.Scripts.Views
                 return false;
             }
 
-            if (LocalDatabase.CompanyAdditionalRegions.ContainsKey(companyName))
+            var customRegions = LocalDatabase.Data["companies"][companyName]["regions"];
+
+            if (customRegions.Count > 0)
             {
-                regions.AddRange(LocalDatabase.CompanyAdditionalRegions[companyName]);
+                regions.AddRange(customRegions.ToList<string>());
+                regions = regions.Distinct().ToList();
             }
 
-            foreach (var region in regions)
+            if (regions.Any(region => LocalDatabase.Data["regions"].Childs.Single(i => i[0].Value == Profile.Region).Childs.Any(r => region.Contains(r))))
             {
-                foreach (var r in LocalDatabase.RegionList.Single(i => i.Contains(Profile.Region)))
-                {
-                    if (region.Contains(r))
-                    {
-                        return false;
-                    }
-                }
+                return false;
             }
 
-            Debug.Log("SkipByRegion: " + companyName + " = " + string.Join(", ", regions.ToArray()));
+            LogFormat("Company {0} was skipped by region {1}. Company regions: {2}",
+                companyName, Profile.Region, string.Join(", ", regions.ToArray()));
 
             return true;
         }

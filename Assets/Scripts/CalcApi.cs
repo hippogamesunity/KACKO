@@ -13,7 +13,7 @@ namespace Assets.Scripts
         
         public static string GetApiKey(string login, string password)
         {
-            return GetResponse(null, string.Format("/auth/api?login={0}&password={1}", login, password));
+            return GetResponse(null, string.Format("/auth/api?login={0}&passwordHash={1}", login, password));
         }
 
         public static string GetCars(string apiKey)

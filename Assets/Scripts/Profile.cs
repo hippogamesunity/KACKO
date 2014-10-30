@@ -49,7 +49,7 @@ namespace Assets.Scripts
         public static int Donate;
 
         private const string Login = "mYhx2YytWYulmY392ZtFXZAN2Zh1Wauw2Yt9";
-        private const string Password = "Xcldnc6RTMzIAN==";
+        private const string PasswordHash = "TZ3YWN3IDNhNGZlRjY1ETY3YmNwEzNxY2Y0IzM3Q2N=Y";
 
         private static string CachePath
         {
@@ -78,7 +78,7 @@ namespace Assets.Scripts
 
         public static void Sync()
         {
-            var json = JSON.Parse(CalcApi.GetApiKey(B64R.Decode(Login), B64R.Decode(Password)));
+            var json = JSON.Parse(CalcApi.GetApiKey(B64R.Decode(Login), B64R.Decode(PasswordHash)));
             var error = json["error"];
 
             if (error != null)
@@ -186,13 +186,25 @@ namespace Assets.Scripts
         {
             if (Cars != null && (Engine.GetMakeId(Make) == null || Engine.GetModelId(Model) == null))
             {
+                if (Engine.GetMakeId(Make) == null)
+                {
+                    Debug.Log("Unknown make: " + Make);
+                }
+
+                if (Engine.GetMakeId(Model) == null)
+                {
+                    Debug.Log("Unknown model: " + Model);
+                }
+
                 Make = null;
                 Model = null;
                 Save();
             }
 
-            if (!LocalDatabase.RegionList.Any(i => i.Contains(Region)))
+            if (!LocalDatabase.Data["regions"].Childs.Any(i => i.ToList<string>().Contains(Region)))
             {
+                Debug.Log("Unknown region: " + Region);
+
                 Region = null;
                 Save();
             }

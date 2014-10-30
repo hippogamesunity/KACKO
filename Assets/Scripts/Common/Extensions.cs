@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
+using SimpleJSON;
 using UnityEngine;
 
 namespace Assets.Scripts.Common
@@ -76,6 +79,11 @@ namespace Assets.Scripts.Common
         public static Color SetAlpha(this Color color, float alpha)
         {
             return new Color(color.r, color.g, color.b, alpha);
+        }
+
+        public static List<T> ToList<T>(this JSONNode jsonNode)
+        {
+            return jsonNode.Childs.Select(i => i.Value).Cast<T>().ToList();
         }
     }
 }

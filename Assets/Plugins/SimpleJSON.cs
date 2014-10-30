@@ -89,7 +89,6 @@ namespace SimpleJSON
                         yield return D;
             }
         }
- 
         public override string ToString()
         {
             return "JSONNode";
@@ -677,6 +676,10 @@ namespace SimpleJSON
     public class JSONClass : JSONNode, IEnumerable
     {
         private Dictionary<string,JSONNode> m_Dict = new Dictionary<string,JSONNode>();
+        public List<string> Keys
+        {
+            get { return m_Dict.Keys.ToList(); }
+        }
         public override JSONNode this[string aKey]
         {
             get
