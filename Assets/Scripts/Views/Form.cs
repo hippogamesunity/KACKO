@@ -86,6 +86,7 @@ namespace Assets.Scripts.Views
 
                     Profile.Power = power;
                     Profile.Save();
+                    UnityEngine.Debug.Log(power);
                     Power.value = Convert.ToString(power);
                 })
             };

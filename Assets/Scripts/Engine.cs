@@ -13,6 +13,11 @@ namespace Assets.Scripts
         public Transform[] ProgressBar;
         public bool Loading;
 
+        public void Awake()
+        {
+            Screen.sleepTimeout = 60; 
+        }
+
         public void Start()
         {
             //PlayerPrefs.DeleteAll(); // TODO:
@@ -260,14 +265,12 @@ namespace Assets.Scripts
 
             if (exception is ApiKeyException)
             {
-                try
+                Profile.Sync();
+                exception = TryCalculate(osago);
+
+                if (exception != null)
                 {
-                    Profile.Sync();
-                    TryCalculate(osago);
-                }
-                catch (Exception e)
-                {
-                    ShowException(e);
+                    ShowException(exception);
                 }
             }
             else

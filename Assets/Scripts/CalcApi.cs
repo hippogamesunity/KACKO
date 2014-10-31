@@ -77,6 +77,8 @@ namespace Assets.Scripts
         {
             var response = (HttpWebResponse) request.GetResponse();
 
+            UnityEngine.Debug.Log("Response: " + response.StatusCode);
+
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception("response status code: " + response.StatusCode);
@@ -92,7 +94,7 @@ namespace Assets.Scripts
                 var reader = new StreamReader(stream, Encoding.UTF8);
                 var responseString = reader.ReadToEnd();
 
-                if (responseString.Contains("<!DOCTYPE html>"))
+                if (responseString.Contains("<!DOCTYPE html>") || responseString.Contains("(500) Internal Server Error"))
                 {
                     throw new ApiKeyException("некорректный ключ API");
                 }
