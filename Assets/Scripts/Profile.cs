@@ -108,6 +108,7 @@ namespace Assets.Scripts
             PlayerPrefs.SetString(Keys.Sex, Sex);
             PlayerPrefs.SetInt(Keys.Age, Age);
             PlayerPrefs.SetInt(Keys.Exp, Exp);
+			PlayerPrefs.SetInt(Keys.Donate, Donate);
             PlayerPrefs.Save();
         }
 
