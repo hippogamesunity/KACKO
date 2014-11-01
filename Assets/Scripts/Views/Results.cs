@@ -129,7 +129,7 @@ namespace Assets.Scripts.Views
         {
             try
             {
-                return int.Parse(node.Value.Split(Convert.ToChar("."))[0]);
+                return (int) float.Parse(node.Value.Replace(",", ".").Replace(" ", null));
             }
             catch
             {

@@ -9,13 +9,16 @@ namespace Assets.Scripts.Views
         public UILabel Name;
         public UISprite Icon;
         public GameButton Navigate;
+        public GameButton Call;
         public UISprite[] Stars;
         public UILabel Price;
         public string Url;
+        public string Phone;
 
         public void Start()
         {
             Navigate.Up += () => Application.OpenURL(Url);
+            Call.Up += () => Application.OpenURL(string.Format("tel:{0}", Phone));
         }
 
         public void Initialize(Result result, JSONNode company)
@@ -31,8 +34,11 @@ namespace Assets.Scripts.Views
             }
 
             Url = company["site"].Value;
+            Phone = company["phone"]["Москва"].Value;
             Icon.spriteName = company["icon"].Value;
+
             Navigate.Enabled = company["site"].Value != "";
+            Call.Enabled = company["phone"]["Москва"].Value != "";
         }
     }
 }

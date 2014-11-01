@@ -26,8 +26,23 @@ namespace Assets.Scripts
             GetComponent<GameShop>().Refresh();
         }
 
+        private DateTime _down;
+
         public void Update()
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                _down = DateTime.UtcNow;
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                if (DateTime.UtcNow > _down.AddSeconds(5))
+                {
+                    GetComponent<DebugConsole>().enabled = !GetComponent<DebugConsole>().enabled;
+                    _down = DateTime.UtcNow;
+                }
+            }
+
             if (Input.GetKeyDown(KeyCode.Escape) && FindObjectsOfType<TweenPosition>().All(i => !i.enabled))
             {
                 if (ViewBase.Current is Intro)
@@ -245,6 +260,7 @@ namespace Assets.Scripts
 
         public void OpenStore()
         {
+            Debug.Log(PlanformDependedSettings.StoreLink);
             Application.OpenURL(PlanformDependedSettings.StoreLink);
         }
 
