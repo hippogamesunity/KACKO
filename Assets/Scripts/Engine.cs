@@ -43,7 +43,28 @@ namespace Assets.Scripts
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Escape) && FindObjectsOfType<TweenPosition>().All(i => !i.enabled))
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Back();
+            }
+
+            if (Loading)
+            {
+                foreach (var sprite in ProgressBar)
+                {
+                    sprite.transform.localPosition += new Vector3(2, 0);
+
+                    if (sprite.transform.localPosition.x >= 1280)
+                    {
+                        sprite.transform.localPosition = new Vector3(-1280, sprite.transform.localPosition.y);
+                    }
+                }
+            }
+        }
+
+        public void Back()
+        {
+            if (FindObjectsOfType<TweenPosition>().All(i => !i.enabled))
             {
                 if (ViewBase.Current is Intro)
                 {
@@ -76,19 +97,6 @@ namespace Assets.Scripts
                 else if (ViewBase.Current is CompanyResult)
                 {
                     GetComponent<Results>().Open(TweenDirection.Left);
-                }
-            }
-
-            if (Loading)
-            {
-                foreach (var sprite in ProgressBar)
-                {
-                    sprite.transform.localPosition += new Vector3(2, 0);
-
-                    if (sprite.transform.localPosition.x >= 1280)
-                    {
-                        sprite.transform.localPosition = new Vector3(-1280, sprite.transform.localPosition.y);
-                    }
                 }
             }
         }

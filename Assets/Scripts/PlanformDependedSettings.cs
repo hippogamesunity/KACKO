@@ -18,8 +18,8 @@ namespace Assets.Scripts
     public static class PlanformDependedSettings
     {
         public static string StoreName = OpenIAB_iOS.STORE;
-        public const string StorePublicKey = "";
-        public const string StoreLink = "itms-apps://itunes.apple.com/app/0";
+        public const string StorePublicKey = "41f95fc5fdbe455a963a21b411f9024f";
+        public const string StoreLink = "itms-apps://itunes.apple.com/app/936492645";
     }
 
     #endif
