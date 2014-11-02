@@ -39,6 +39,12 @@ namespace Assets.Scripts.Views
 
             Navigate.Enabled = company["site"].Value != "";
             Call.Enabled = company["phone"]["Москва"].Value != "";
+
+            #if UNITY_IPHONE
+
+            Phone = Phone.Replace("(", null).Replace("(", null).Replace(" ", "-");
+
+            #endif
         }
     }
 }

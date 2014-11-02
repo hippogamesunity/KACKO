@@ -156,11 +156,11 @@ namespace Assets.Scripts
 
             Price = PlayerPrefs.HasKey(Keys.Price)
                 ? PlayerPrefs.GetInt(Keys.Price)
-                : 1000000;
+                : 618000;
 
             Power = PlayerPrefs.HasKey(Keys.Power)
                 ? PlayerPrefs.GetInt(Keys.Power)
-                : 1000000;
+                : 125;
 
             Region = PlayerPrefs.HasKey(Keys.Region)
                 ? PlayerPrefs.GetString(Keys.Region)
