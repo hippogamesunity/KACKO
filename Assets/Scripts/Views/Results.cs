@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Common;
 using SimpleJSON;
@@ -16,7 +15,6 @@ namespace Assets.Scripts.Views
         public void Initialize(JSONNode companies, JSONNode calc, bool osago = false)
         {
             var results = new List<Result>();
-            var skip = LocalDatabase.Data["skip"].ToList<string>();
 
             for (var k = 0; k < calc["results"].Count; k++)
             {
@@ -37,9 +35,6 @@ namespace Assets.Scripts.Views
                 if (company == null) continue;
 
                 var companyName = company["name"];
-
-                if (skip.Contains(companyName.Value)) continue;
-
                 var companyShortName = company["nameshort"];
                 var companyRating = company["rating"];
 
