@@ -19,7 +19,7 @@ namespace Assets.Scripts
     {
         public static string StoreName = OpenIAB_iOS.STORE;
         public const string StorePublicKey = "41f95fc5fdbe455a963a21b411f9024f";
-        public const string StoreLink = "itms-apps://itunes.apple.com/app/936492645";
+        public const string StoreLink = "itms-apps://itunes.apple.com/app/id936492645";
     }
 
     #endif
