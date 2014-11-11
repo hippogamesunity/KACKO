@@ -126,8 +126,7 @@ namespace Assets.Scripts
             }
             catch (Exception e)
             {
-                Debug.Log(e);
-                StopLoading(string.Format("Ошибка подключения к API: {0}", e.Message));
+                ShowException(e);
             }
         }
 
