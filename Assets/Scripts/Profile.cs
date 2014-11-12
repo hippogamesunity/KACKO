@@ -167,7 +167,7 @@ namespace Assets.Scripts
 
             Region = PlayerPrefs.HasKey(Keys.Region)
                 ? PlayerPrefs.GetString(Keys.Region)
-                : Regions.Default;
+                : Views.Region.Default;
 
             Franchise = PlayerPrefs.HasKey(Keys.Franchise)
                 ? PlayerPrefs.GetInt(Keys.Franchise)

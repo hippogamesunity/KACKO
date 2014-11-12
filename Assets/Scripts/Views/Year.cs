@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.Views
 {
-    public class Years : ViewBasePaging
+    public class Year : ViewBasePaging
     {
-        public string Production;
+        public string Bounds;
 
         protected override Vector2 Size { get { return new Vector2(3, 18); } }
         protected override Vector2 Step { get { return new Vector2(180, 45); } }
@@ -32,11 +32,11 @@ namespace Assets.Scripts.Views
                 instance.transform.localPosition =
                     new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
 
-                if (Production == null) continue;
+                if (Bounds == null) continue;
 
                 int from, to;
 
-                ParseProduction(Production, out from, out to);
+                ParseProduction(Bounds, out from, out to);
                 instance.GetComponent<GameButton>().Enabled = year >= from && year <= to;
             }
         }

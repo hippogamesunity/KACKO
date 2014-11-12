@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Views
 {
-    public class Regions : ViewBasePaging
+    public class Region : ViewBasePaging
     {
         public const string Default = "Москва";
         public const string RequestRegion = "Вашего нет?\nСообщите нам!";

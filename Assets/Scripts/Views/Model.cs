@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Views
 {
-    public class Models : ViewBasePaging
+    public class Model : ViewBasePaging
     {
         protected override void Initialize()
         {

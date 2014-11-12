@@ -83,7 +83,7 @@ namespace Assets.Scripts
             {
                 "regions", new JSONArray
                 {
-                    Regions.Default,
+                    Region.Default,
                     "Московская область",
                     "Санкт-Петербург",
                     "Астрахань",
@@ -134,7 +134,7 @@ namespace Assets.Scripts
                     "Чебоксары",
                     "Челябинск",
                     "Ярославль",
-                    Regions.RequestRegion
+                    Region.RequestRegion
                 }
             },
             {

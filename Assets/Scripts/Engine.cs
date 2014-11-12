@@ -78,30 +78,30 @@ namespace Assets.Scripts
                 {
                     GetComponent<Form>().Open(TweenDirection.Left);
                 }
-                else if (ViewBase.Current is Models)
+                else if (ViewBase.Current is Model)
                 {
                     GetComponent<Makes>().Open(TweenDirection.Left);
                 }
                 else if (ViewBase.Current is Generation)
                 {
-                    GetComponent<Models>().Open(TweenDirection.Left);
+                    GetComponent<Model>().Open(TweenDirection.Left);
                 }
                 else if (ViewBase.Current is Engines)
                 {
                     GetComponent<Generation>().Open(TweenDirection.Left);
                 }
-                else if (ViewBase.Current is Years)
+                else if (ViewBase.Current is Year)
                 {
-                    if (GetComponent<Years>().Production == null)
+                    if (GetComponent<Year>().Bounds == null)
                     {
-                        GetComponent<Models>().Open(TweenDirection.Left);
+                        GetComponent<Model>().Open(TweenDirection.Left);
                     }
                     else
                     {
                         GetComponent<Engines>().Open(TweenDirection.Left);
                     }
                 }
-                else if (ViewBase.Current is Regions)
+                else if (ViewBase.Current is Region)
                 {
                     GetComponent<Form>().Open(TweenDirection.Left);
                 }
@@ -157,7 +157,7 @@ namespace Assets.Scripts
         public void SelectMake(string make)
         {
             Profile.Make = make;
-            GetComponent<Models>().Open(TweenDirection.Right);
+            GetComponent<Model>().Open(TweenDirection.Right);
         }
 
         public void SelectModel(string model)
@@ -183,8 +183,8 @@ namespace Assets.Scripts
 
             if (database == null)
             {
-                GetComponent<Years>().Production = null;
-                GetComponent<Years>().Open(TweenDirection.Right);
+                GetComponent<Year>().Bounds = null;
+                GetComponent<Year>().Open(TweenDirection.Right);
             }
             else
             {
@@ -193,8 +193,8 @@ namespace Assets.Scripts
 
                 if (jsonModel == null)
                 {
-                    GetComponent<Years>().Production = null;
-                    GetComponent<Years>().Open(TweenDirection.Right);
+                    GetComponent<Year>().Bounds = null;
+                    GetComponent<Year>().Open(TweenDirection.Right);
                 }
                 else
                 {
@@ -235,8 +235,8 @@ namespace Assets.Scripts
                 Profile.Price = price;
             }
 
-            GetComponent<Years>().Production = production;
-            GetComponent<Years>().Open(TweenDirection.Right);
+            GetComponent<Year>().Bounds = production;
+            GetComponent<Year>().Open(TweenDirection.Right);
         }
 
         public void SelectYear(int year)
@@ -249,7 +249,7 @@ namespace Assets.Scripts
 
         public void SelectRegion()
         {
-            GetComponent<Regions>().Open(TweenDirection.Right);
+            GetComponent<Region>().Open(TweenDirection.Right);
         }
 
         public void SelectRegion(string region)
