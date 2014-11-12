@@ -13,7 +13,7 @@ namespace Assets.Scripts.Views
 
         protected virtual Vector2 Size { get { return new Vector2(3, 18); } }
         protected virtual Vector2 Step { get { return new Vector2(180, 45); } }
-        protected virtual Vector2 Position { get { return new Vector2(250, 430); } }
+        protected virtual Vector2 Position { get { return new Vector2(240, 430); } }
 
         public void SlideRight()
         {

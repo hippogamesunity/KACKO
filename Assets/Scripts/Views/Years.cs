@@ -7,6 +7,8 @@ namespace Assets.Scripts.Views
 {
     public class Years : ViewBasePaging
     {
+        public string Production;
+
         protected override Vector2 Size { get { return new Vector2(3, 18); } }
         protected override Vector2 Step { get { return new Vector2(180, 45); } }
         protected override Vector2 Position { get { return new Vector2(180, 430); } }
@@ -29,6 +31,33 @@ namespace Assets.Scripts.Views
                 instance.GetComponent<GameButton>().Up += () => GetComponent<Engine>().SelectYear(year);
                 instance.transform.localPosition =
                     new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
+
+                if (Production == null) continue;
+
+                int from, to;
+
+                ParseProduction(Production, out from, out to);
+                instance.GetComponent<GameButton>().Enabled = year >= from && year <= to;
+            }
+        }
+
+        private static void ParseProduction(string production, out int from, out int to)
+        {
+            if (string.IsNullOrEmpty(production))
+            {
+                from = to = 0;
+            }
+            else
+            {
+                var parts = production.Split(Convert.ToChar("–"));
+
+                int.TryParse(parts[0], out from);
+                int.TryParse(parts[1], out to);
+
+                if (to == 0)
+                {
+                    to = 9999;
+                }
             }
         }
     }

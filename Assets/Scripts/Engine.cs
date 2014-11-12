@@ -82,11 +82,30 @@ namespace Assets.Scripts
                 {
                     GetComponent<Makes>().Open(TweenDirection.Left);
                 }
-                else if (ViewBase.Current is Years)
+                else if (ViewBase.Current is Generation)
                 {
                     GetComponent<Models>().Open(TweenDirection.Left);
                 }
+                else if (ViewBase.Current is Engines)
+                {
+                    GetComponent<Generation>().Open(TweenDirection.Left);
+                }
+                else if (ViewBase.Current is Years)
+                {
+                    if (GetComponent<Years>().Production == null)
+                    {
+                        GetComponent<Models>().Open(TweenDirection.Left);
+                    }
+                    else
+                    {
+                        GetComponent<Engines>().Open(TweenDirection.Left);
+                    }
+                }
                 else if (ViewBase.Current is Regions)
+                {
+                    GetComponent<Form>().Open(TweenDirection.Left);
+                }
+                else if (ViewBase.Current is Franchise)
                 {
                     GetComponent<Form>().Open(TweenDirection.Left);
                 }
@@ -144,8 +163,7 @@ namespace Assets.Scripts
         public void SelectModel(string model)
         {
             Profile.Model = model;
-            GetComponent<Years>().Open(TweenDirection.Right);
-
+            
             var models = Profile.Cars.Childs.Single(i => i["name"].Value == Profile.Make)["models"];
             var car = models.Childs.Single(i => i["name"].Value == Profile.Model);
             var price = int.Parse(car["price"]);
@@ -160,6 +178,65 @@ namespace Assets.Scripts
             {
                 Profile.Power = power;
             }
+
+            var database = Resources.Load<TextAsset>("CarDatabase/" + Profile.Make);
+
+            if (database == null)
+            {
+                GetComponent<Years>().Production = null;
+                GetComponent<Years>().Open(TweenDirection.Right);
+            }
+            else
+            {
+                var jsonMake = JSON.Parse(database.text);
+                var jsonModel = jsonMake["models"].Childs.FirstOrDefault(i => i["name"].Value.Equals(model, StringComparison.InvariantCultureIgnoreCase));
+
+                if (jsonModel == null)
+                {
+                    GetComponent<Years>().Production = null;
+                    GetComponent<Years>().Open(TweenDirection.Right);
+                }
+                else
+                {
+                    var generations = jsonModel["generations"];
+
+                    if (generations.Count == 1)
+                    {
+                        GetComponent<Engines>().JsonGeneration = generations[0];
+                        GetComponent<Engines>().Open(TweenDirection.Right);
+                    }
+                    else
+                    {
+                        GetComponent<Generation>().JsonModel = jsonModel;
+                        GetComponent<Generation>().Open(TweenDirection.Right);
+                    }
+                }
+            }
+        }
+
+        public void SelectGeneration(string generation)
+        {
+            GetComponent<Engines>().JsonGeneration = GetComponent<Generation>().JsonModel["generations"].Childs.Single(i => i["name"].Value.Equals(generation));
+            GetComponent<Engines>().Open(TweenDirection.Right);
+        }
+
+        public void SelectEngine(string engine, string powerString, string priceString, string production)
+        {
+            var power = JsonHelper.GetInt(powerString);
+            var price = JsonHelper.GetInt(priceString);
+
+            if (power > 0)
+            {
+                Profile.Power = power;
+            }
+
+            if (price > 0)
+            {
+                Profile.Price = price;
+            }
+
+            GetComponent<Years>().Production = production;
+            GetComponent<Years>().Open(TweenDirection.Right);
         }
 
         public void SelectYear(int year)
@@ -178,6 +255,19 @@ namespace Assets.Scripts
         public void SelectRegion(string region)
         {
             Profile.Region = region;
+            Profile.Save();
+            GetComponent<Form>().Open(TweenDirection.Right);
+            GetComponent<Form>().UpdateForm();
+        }
+
+        public void SelectFranchise()
+        {
+            GetComponent<Franchise>().Open(TweenDirection.Right);
+        }
+
+        public void SelectFranchise(int franchise)
+        {
+            Profile.Franchise = franchise;
             Profile.Save();
             GetComponent<Form>().Open(TweenDirection.Right);
             GetComponent<Form>().UpdateForm();
@@ -233,6 +323,8 @@ namespace Assets.Scripts
                         }
                     }
                 },
+                { "region", new JSONData(Profile.Region) },
+                { "franchise", new JSONData(Profile.Franchise) }
             }.ToString();
 
             Debug.Log("Request json: " + request);

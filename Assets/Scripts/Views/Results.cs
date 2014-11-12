@@ -38,21 +38,19 @@ namespace Assets.Scripts.Views
                 var companyShortName = company["nameshort"];
                 var companyRating = company["rating"];
 
-                if (SkipByRegion(regions, companyName)) continue;
-
                 results.Add(new Result
                 {
                     CompanyName = companyName.Value,
                     CompanyShortName = companyShortName.Value,
-                    Rating = GetInt(companyRating),
-                    Price = GetInt(price),
+                    Rating = JsonHelper.GetInt(companyRating),
+                    Price = JsonHelper.GetInt(price),
                     Regions = regions
                 });
             }
 
             if (osago)
             {
-                var price = GetInt(calc["results"].Childs.Single(i => i["info"]["code"].Value == "OSAGO")["result"]["total"]["premium"]);
+                var price = JsonHelper.GetInt(calc["results"].Childs.Single(i => i["info"]["code"].Value == "OSAGO")["result"]["total"]["premium"]);
 
                 results.ForEach(i => i.Price = price);
                 results = results.OrderByDescending(i => i.Rating).ToList();
@@ -92,44 +90,6 @@ namespace Assets.Scripts.Views
             var companyInfo = LocalDatabase.Data["companies"][companyName];
 
             return companyInfo.Count > 0 ? companyInfo : new JSONClass { { "icon", "Default" } };
-        }
-
-        private static bool SkipByRegion(List<string> regions, string companyName)
-        {
-            if (Profile.Region == Regions.AnyRegion)
-            {
-                return false;
-            }
-
-            var customRegions = LocalDatabase.Data["companies"][companyName]["regions"];
-
-            if (customRegions.Count > 0)
-            {
-                regions.AddRange(customRegions.ToList<string>());
-                regions = regions.Distinct().ToList();
-            }
-
-            if (regions.Any(region => LocalDatabase.Data["regions"].Childs.Single(i => i[0].Value == Profile.Region).Childs.Any(r => region.Contains(r))))
-            {
-                return false;
-            }
-
-            LogFormat("Company {0} was skipped by region {1}. Company regions: {2}",
-                companyName, Profile.Region, string.Join(", ", regions.ToArray()));
-
-            return true;
-        }
-
-        private static int GetInt(JSONNode node)
-        {
-            try
-            {
-                return (int) float.Parse(node.Value.Replace(",", ".").Replace(" ", null));
-            }
-            catch
-            {
-                return 0;
-            }
         }
     }
 }

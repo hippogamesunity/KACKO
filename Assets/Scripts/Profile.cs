@@ -16,6 +16,7 @@ namespace Assets.Scripts
         public const string Price = "Price";
         public const string Power = "Power";
         public const string Region = "Region";
+        public const string Franchise = "Franchise";
         public const string Sex = "Sex";
         public const string Age = "Age";
         public const string Exp = "Exp";
@@ -42,6 +43,7 @@ namespace Assets.Scripts
         public static int Price;
         public static int Power;
         public static string Region;
+        public static int Franchise;
 
         public static string Sex;
         public static int Age;
@@ -105,6 +107,7 @@ namespace Assets.Scripts
             PlayerPrefs.SetInt(Keys.Price, Price);
             PlayerPrefs.SetInt(Keys.Power, Power);
             PlayerPrefs.SetString(Keys.Region, Region);
+            PlayerPrefs.SetInt(Keys.Franchise, Franchise);
             PlayerPrefs.SetString(Keys.Sex, Sex);
             PlayerPrefs.SetInt(Keys.Age, Age);
             PlayerPrefs.SetInt(Keys.Exp, Exp);
@@ -164,7 +167,11 @@ namespace Assets.Scripts
 
             Region = PlayerPrefs.HasKey(Keys.Region)
                 ? PlayerPrefs.GetString(Keys.Region)
-                : Regions.AnyRegion;
+                : Regions.Default;
+
+            Franchise = PlayerPrefs.HasKey(Keys.Franchise)
+                ? PlayerPrefs.GetInt(Keys.Franchise)
+                : 0;
 
             Sex = PlayerPrefs.HasKey(Keys.Sex)
                 ? PlayerPrefs.GetString(Keys.Sex)
@@ -202,7 +209,7 @@ namespace Assets.Scripts
                 Save();
             }
 
-            if (!LocalDatabase.Data["regions"].Childs.Any(i => i.ToList<string>().Contains(Region)))
+            if (!LocalDatabase.Data["regions"].Childs.Select(i => i.Value).Contains(Region))
             {
                 Debug.Log("Unknown region: " + Region);
 

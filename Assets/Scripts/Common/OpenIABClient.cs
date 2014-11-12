@@ -13,7 +13,7 @@ namespace Assets.Scripts.Common
 
     public class OpenIABClient : IDisposable
     {
-        public static bool EnableLog = true;
+        public static bool EnableLog = false;
         public event Action<Purchase> PurchaseSucceeded = purchase => { }; 
         public event Action<string> PurchaseFailed = error => { };
         public event Action<Purchase> ConsumePurchaseSucceeded = purchase => { };
