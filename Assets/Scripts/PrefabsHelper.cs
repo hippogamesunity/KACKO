@@ -20,6 +20,11 @@ namespace Assets.Scripts
             return Instantiate("LinkRegion", parent);
         }
 
+        public static GameObject InstantiateLinkGeneration(Transform parent)
+        {
+            return Instantiate("LinkGeneration", parent);
+        }
+
         public static GameObject InstantiateLinkEngine(Transform parent)
         {
             return Instantiate("LinkEngine", parent);

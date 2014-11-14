@@ -11,6 +11,10 @@ namespace Assets.Scripts.Views
         public JSONNode JsonModel;
         private const string Skip = "[Пропустить]";
 
+        protected override Vector2 Size { get { return new Vector2(1, 18); } }
+        protected override Vector2 Step { get { return new Vector2(260, 45); } }
+        protected override Vector2 Position { get { return new Vector2(240, 430); } }
+
         protected override void Initialize()
         {
             var generations = new List<string> { Skip };
@@ -23,7 +27,7 @@ namespace Assets.Scripts.Views
             {
                 var page = (int) Mathf.Floor(i / (Size.x * Size.y));
                 var j = i % (Size.x * Size.y);
-                var instance = PrefabsHelper.InstantiateLink(Pages[page].transform);
+                var instance = PrefabsHelper.InstantiateLinkGeneration(Pages[page].transform);
                 var generation = generations[i];
 
                 instance.name = generation;

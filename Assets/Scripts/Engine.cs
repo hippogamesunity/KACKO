@@ -179,7 +179,7 @@ namespace Assets.Scripts
                 Profile.Power = power;
             }
 
-            var database = Resources.Load<TextAsset>("CarDatabase/" + Profile.Make);
+            var database = Resources.Load<TextAsset>("Cars/" + Profile.Make);
 
             if (database == null)
             {
