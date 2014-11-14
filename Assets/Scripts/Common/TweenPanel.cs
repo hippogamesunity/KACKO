@@ -10,6 +10,8 @@ namespace Assets.Scripts.Common
         public Vector3 CustomTweenPosition;
         public float DefaultTimeout = 0.4f;
 
+        private readonly int _id = (int) CRandom.GetRandom(999999);
+
         public bool Displayed
         {
             get { return transform.localPosition == Vector3.zero; }
@@ -91,7 +93,13 @@ namespace Assets.Scripts.Common
             }
 
             TweenAlpha.Begin(gameObject, timeout / 2, show ? 1 : 0);
-            TaskScheduler.CreateTask(() => gameObject.SetActive(show), show ? 0 : timeout);
+
+            if (!show)
+            {
+                TaskScheduler.Kill(_id);
+            }
+
+            TaskScheduler.CreateTask(() => gameObject.SetActive(show), _id, show ? 0 : timeout);
         }
 
         private static Vector3 GetVector(TweenDirection tweenDirection, float aspect)

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Text;
 using Assets.Scripts.Common;
 using Assets.Scripts.Views;
-using ICSharpCode.SharpZipLib.BZip2;
 using SimpleJSON;
 using UnityEngine;
 
@@ -352,6 +349,8 @@ namespace Assets.Scripts
             {
                 foreach (var mod in jsonMake["models"].Childs)
                 {
+                    var engines = new JSONArray();
+
                     foreach (var generation in mod["generations"].Childs)
                     {
                         foreach (var engine in generation["engines"].Childs)
@@ -360,21 +359,39 @@ namespace Assets.Scripts
 
                             if (joined.Contains(model))
                             {
-                                return new JSONClass
-                                {
-                                    { "name", joined},
-                                    { "generations", new JSONArray
-                                        {
-                                            new JSONClass
-                                            {
-                                                { "name", joined },
-                                                { "engines", new JSONArray { engine } }
-                                            }
-                                        }
-                                    }
-                                };
+                                engines.Add(engine);
                             }
                         }
+                    }
+
+                    if (engines.Count > 0)
+                    {
+                        return new JSONClass
+                        {
+                            { "name", model },
+                            { "generations", new JSONArray
+                                {
+                                    new JSONClass
+                                    {
+                                        { "name", model },
+                                        { "engines", engines }
+                                    }
+                                }
+                            }
+                        };
+                    }
+                }
+            }
+
+            if (jsonModel == null && model.Contains(" "))
+            {
+                model = model.Split(Convert.ToChar(" "))[0];
+
+                foreach (var mod in jsonMake["models"].Childs)
+                {
+                    if (mod["name"].Value == model)
+                    {
+                        return mod;
                     }
                 }
             }
