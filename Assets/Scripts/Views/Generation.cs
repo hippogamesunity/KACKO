@@ -36,8 +36,11 @@ namespace Assets.Scripts.Views
 
                 if (generation == Skip)
                 {
-                    GetComponent<Year>().Bounds = null;
-                    instance.GetComponent<GameButton>().Up += () => GetComponent<Year>().Open(TweenDirection.Right);
+                    instance.GetComponent<GameButton>().Up += () =>
+                    {
+                        GetComponent<Year>().Bounds = null;
+                        GetComponent<Year>().Open(TweenDirection.Right);
+                    };
                 }
                 else
                 {

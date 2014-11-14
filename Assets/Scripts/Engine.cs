@@ -88,7 +88,14 @@ namespace Assets.Scripts
                 }
                 else if (ViewBase.Current is Engines)
                 {
-                    GetComponent<Generation>().Open(TweenDirection.Left);
+                    if (GetComponent<Generation>().JsonModel == null)
+                    {
+                        GetComponent<Model>().Open(TweenDirection.Left);
+                    }
+                    else
+                    {
+                        GetComponent<Generation>().Open(TweenDirection.Left);
+                    }
                 }
                 else if (ViewBase.Current is Year)
                 {
@@ -202,6 +209,7 @@ namespace Assets.Scripts
 
                     if (generations.Count == 1)
                     {
+                        GetComponent<Generation>().JsonModel = null;
                         GetComponent<Engines>().JsonGeneration = generations[0];
                         GetComponent<Engines>().Open(TweenDirection.Right);
                     }
@@ -220,10 +228,9 @@ namespace Assets.Scripts
             GetComponent<Engines>().Open(TweenDirection.Right);
         }
 
-        public void SelectEngine(string engine, string powerString, string priceString, string production)
+        public void SelectEngine(string engine, string powerString, int price, string production)
         {
             var power = JsonHelper.GetInt(powerString);
-            var price = JsonHelper.GetInt(priceString);
 
             if (power > 0)
             {

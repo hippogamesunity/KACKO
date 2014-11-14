@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Assets.Scripts.Common;
 using SimpleJSON;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace Assets.Scripts.Views
                 var instance = PrefabsHelper.InstantiateLinkEngine(Pages[page].transform);
                 var engine = engines[i]["name"].Value;
                 var power = engines[i]["power"].Value;
-                var price = engines[i]["price"].Value;
+                var price = GetPrice(engines[i]["price"].Value);
                 var production = engines[i]["production"].Value;
 
                 instance.name = engine;
@@ -36,6 +37,18 @@ namespace Assets.Scripts.Views
                 instance.transform.localPosition =
                     new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
             }
+        }
+
+        private int GetPrice(string price)
+        {
+            var parts = price.Split(Convert.ToChar("–"));
+
+            if (parts.Length == 1)
+            {
+                return JsonHelper.GetInt(parts[0]);
+            }
+
+            return (JsonHelper.GetInt(parts[0]) + JsonHelper.GetInt(parts[1])) / 2;
         }
     }
 }
