@@ -49,7 +49,7 @@ namespace Assets.Scripts.Views
             }
             else
             {
-                var parts = production.Split(Convert.ToChar("–"));
+                var parts = production.Split(Convert.ToChar("-"));
 
                 int.TryParse(parts[0], out from);
                 int.TryParse(parts[1], out to);

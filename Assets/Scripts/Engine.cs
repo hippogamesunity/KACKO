@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Assets.Scripts.Common;
 using Assets.Scripts.Views;
+using ICSharpCode.SharpZipLib.BZip2;
 using SimpleJSON;
 using UnityEngine;
 
@@ -195,8 +198,8 @@ namespace Assets.Scripts
             }
             else
             {
-                var jsonMake = JSON.Parse(database.text);
-                var jsonModel = jsonMake["models"].Childs.FirstOrDefault(i => i["name"].Value.Equals(model, StringComparison.InvariantCultureIgnoreCase));
+                var jsonMake = JSONNode.LoadFromCompressedBase64(database.text);
+                var jsonModel = FindJsonModel(jsonMake, model);
 
                 if (jsonModel == null)
                 {
@@ -210,7 +213,7 @@ namespace Assets.Scripts
                     if (generations.Count == 1)
                     {
                         GetComponent<Generation>().JsonModel = null;
-                        GetComponent<Engines>().JsonGeneration = generations[0];
+                        GetComponent<Engines>().JsonEngines = generations[0]["engines"];
                         GetComponent<Engines>().Open(TweenDirection.Right);
                     }
                     else
@@ -224,14 +227,15 @@ namespace Assets.Scripts
 
         public void SelectGeneration(string generation)
         {
-            GetComponent<Engines>().JsonGeneration = GetComponent<Generation>().JsonModel["generations"].Childs.Single(i => i["name"].Value.Equals(generation));
+            var jsonEngines = GetComponent<Generation>().JsonModel["generations"].Childs
+                .Single(i => i["name"].Value.Equals(generation))["engines"];
+
+            GetComponent<Engines>().JsonEngines = jsonEngines;
             GetComponent<Engines>().Open(TweenDirection.Right);
         }
 
-        public void SelectEngine(string engine, string powerString, int price, string production)
+        public void SelectEngine(string engine, int power, int price, string production)
         {
-            var power = JsonHelper.GetInt(powerString);
-
             if (power > 0)
             {
                 Profile.Power = power;
@@ -337,6 +341,45 @@ namespace Assets.Scripts
             Debug.Log("Request json: " + request);
 
             return request;
+        }
+
+        private static JSONNode FindJsonModel(JSONNode jsonMake, string model)
+        {
+            var jsonModel = jsonMake["models"].Childs.FirstOrDefault(i => i["name"].Value.Equals(model, StringComparison.InvariantCultureIgnoreCase)) ??
+                            jsonMake["models"].Childs.FirstOrDefault(i => i["name"].Value.IndexOf(model, StringComparison.InvariantCultureIgnoreCase) > -1);
+
+            if (jsonModel == null)
+            {
+                foreach (var mod in jsonMake["models"].Childs)
+                {
+                    foreach (var generation in mod["generations"].Childs)
+                    {
+                        foreach (var engine in generation["engines"].Childs)
+                        {
+                            var joined = string.Format("{0} {1}", mod["name"].Value, engine["name"].Value);
+
+                            if (joined.Contains(model))
+                            {
+                                return new JSONClass
+                                {
+                                    { "name", joined},
+                                    { "generations", new JSONArray
+                                        {
+                                            new JSONClass
+                                            {
+                                                { "name", joined },
+                                                { "engines", new JSONArray { engine } }
+                                            }
+                                        }
+                                    }
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+
+            return jsonModel;
         }
 
         public static string GetMakeId(string make)

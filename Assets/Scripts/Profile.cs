@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using Assets.Scripts.Common;
-using Assets.Scripts.Views;
 using SimpleJSON;
 using UnityEngine;
 
