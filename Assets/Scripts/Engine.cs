@@ -357,7 +357,9 @@ namespace Assets.Scripts
                         {
                             var joined = string.Format("{0} {1}", mod["name"].Value, engine["name"].Value);
 
-                            if (joined.Contains(model))
+                            Debug.Log(joined);
+
+                            if (joined.IndexOf(model, StringComparison.InvariantCultureIgnoreCase) > -1)
                             {
                                 engines.Add(engine);
                             }
