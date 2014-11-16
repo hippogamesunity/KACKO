@@ -2,6 +2,7 @@
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
+[Bb]in/
 
 *.csproj
 *.unityproj
@@ -10,3 +11,7 @@
 *.user
 *.userprefs
 *.booproj
+
+!CarDatabase*.dll
+!CarDatabase*.sln
+!CarDatabase*.csproj
