@@ -30,6 +30,11 @@ namespace Assets.Scripts
             return Instantiate("LinkEngine", parent);
         }
 
+        public static GameObject InstantiateReliability(Transform parent)
+        {
+            return Instantiate("Reliability", parent);
+        }
+
         public static GameObject InstantiatePage(Transform parent)
         {
             return Instantiate("Page", parent);

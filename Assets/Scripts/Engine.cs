@@ -124,6 +124,10 @@ namespace Assets.Scripts
                 {
                     GetComponent<Results>().Open(TweenDirection.Left);
                 }
+                else if (ViewBase.Current is Reliability)
+                {
+                    GetComponent<CompanyResult>().Open(TweenDirection.Left);
+                }
             }
         }
 
@@ -428,6 +432,11 @@ namespace Assets.Scripts
         {
             Debug.Log(PlanformDependedSettings.StoreLink);
             Application.OpenURL(PlanformDependedSettings.StoreLink);
+        }
+
+        public void OpenReliability()
+        {
+            GetComponent<Reliability>().Open(TweenDirection.Right);
         }
 
         private void StartCalculate(bool osago)
