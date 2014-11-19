@@ -1,5 +1,5 @@
 //----------------------------------------------
-//            NGUI: Next-Gen UI kit
+//      NGUI: Next-Gen UI kit
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
@@ -597,7 +597,7 @@ public class UIInput : MonoBehaviour
 #if MOBILE
 				if (Application.platform == RuntimePlatform.IPhonePlayer
 					|| Application.platform == RuntimePlatform.Android
-				    || Application.platform == RuntimePlatform.WP8Player
+				  || Application.platform == RuntimePlatform.WP8Player
  #if UNITY_4_3
 					|| Application.platform == RuntimePlatform.BB10Player
  #else

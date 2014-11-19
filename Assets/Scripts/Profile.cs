@@ -191,14 +191,17 @@ namespace Assets.Scripts
 
         private static void Verify()
         {
-            if (Cars != null && (Engine.GetMakeId(Make) == null || Engine.GetModelId(Model) == null))
+            var make = GetMakeId(Make);
+            var model = GetModelId(Model);
+
+            if (Cars != null && (make == null || model == null))
             {
-                if (Engine.GetMakeId(Make) == null)
+                if (make == null)
                 {
                     Debug.Log("Unknown make: " + Make);
                 }
 
-                if (Engine.GetMakeId(Model) == null)
+                if (model == null)
                 {
                     Debug.Log("Unknown model: " + Model);
                 }
@@ -214,6 +217,30 @@ namespace Assets.Scripts
 
                 Region = null;
                 Save();
+            }
+        }
+
+        private static string GetMakeId(string make)
+        {
+            try
+            {
+                return Cars.Childs.Single(i => i["name"].Value == make)["id"].Value;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static string GetModelId(string model)
+        {
+            try
+            {
+                return Cars.Childs.Single(i => i["name"].Value == Make)["models"].Childs.Single(i => i["name"].Value == model).Value;
+            }
+            catch
+            {
+                return null;
             }
         }
     }

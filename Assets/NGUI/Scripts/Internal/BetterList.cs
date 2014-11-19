@@ -1,5 +1,5 @@
 //----------------------------------------------
-//            NGUI: Next-Gen UI kit
+//      NGUI: Next-Gen UI kit
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
@@ -323,8 +323,8 @@ public class BetterList<T>
 
 	//class Comparer : System.Collections.IComparer
 	//{
-	//    public System.Comparison<T> func;
-	//    public int Compare (object x, object y) { return func((T)x, (T)y); }
+	//  public System.Comparison<T> func;
+	//  public int Compare (object x, object y) { return func((T)x, (T)y); }
 	//}
 
 	//Comparer mComp = new Comparer();
@@ -335,11 +335,11 @@ public class BetterList<T>
 
 	//public void Sort (System.Comparison<T> comparer)
 	//{
-	//    if (size > 0)
-	//    {
-	//        mComp.func = comparer;
-	//        System.Array.Sort(buffer, 0, size, mComp);
-	//    }
+	//  if (size > 0)
+	//  {
+	//    mComp.func = comparer;
+	//    System.Array.Sort(buffer, 0, size, mComp);
+	//  }
 	//}
 
 	/// <summary>

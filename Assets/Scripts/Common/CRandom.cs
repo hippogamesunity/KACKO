@@ -5,68 +5,68 @@ namespace Assets.Scripts.Common
 {
 	public static class CRandom
 	{
-	    private static readonly byte[] Buffer = new byte[1024];
-	    private static int _bufferOffset = Buffer.Length;
-	    private static readonly RNGCryptoServiceProvider CryptoProvider = new RNGCryptoServiceProvider();
+	  private static readonly byte[] Buffer = new byte[1024];
+	  private static int _bufferOffset = Buffer.Length;
+	  private static readonly RNGCryptoServiceProvider CryptoProvider = new RNGCryptoServiceProvider();
 
-	    public static int GetRandom()
+	  public static int GetRandom()
+	  {
+	    if (_bufferOffset >= Buffer.Length)
 	    {
-	        if (_bufferOffset >= Buffer.Length)
-	        {
-	            FillBuffer();
-	        }
-
-	        var val = BitConverter.ToInt32(Buffer, _bufferOffset) & 0x7fffffff;
-
-	        _bufferOffset += sizeof(int);
-
-	        return val;
+	      FillBuffer();
 	    }
 
-        public static long GetRandom(long maxValue)
-        {
-            return GetRandom() % maxValue;
-        }
+	    var val = BitConverter.ToInt32(Buffer, _bufferOffset) & 0x7fffffff;
 
-        public static long GetRandom(long minValue, long maxValue)
-        {
-            if (maxValue < minValue)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+	    _bufferOffset += sizeof(int);
 
-            var range = maxValue - minValue;
+	    return val;
+	  }
 
-            return minValue + GetRandom(range);
-        }
+    public static long GetRandom(long maxValue)
+    {
+      return GetRandom() % maxValue;
+    }
 
-        public static double GetRandom(double minValue, double maxValue)
-        {
-            var random = new Random();
+    public static long GetRandom(long minValue, long maxValue)
+    {
+      if (maxValue < minValue)
+      {
+        throw new ArgumentOutOfRangeException();
+      }
 
-            return random.NextDouble() * (maxValue - minValue) + minValue;
-        }
+      var range = maxValue - minValue;
 
-	    /// <summary>
-	    /// Chance 0-100
-	    /// </summary>
-	    public static bool Chance(int chance)
-	    {
-	        return GetRandom(0, 101) < chance;
-	    }
+      return minValue + GetRandom(range);
+    }
 
-	    /// <summary>
-	    /// Chance 0-1f
-	    /// </summary>
-	    public static bool Chance(double chance)
-	    {
-	        return Chance((int) (100 * chance));
-	    }
+    public static double GetRandom(double minValue, double maxValue)
+    {
+      var random = new Random();
 
-        private static void FillBuffer()
-        {
-            CryptoProvider.GetBytes(Buffer);
-            _bufferOffset = 0;
-        }
+      return random.NextDouble() * (maxValue - minValue) + minValue;
+    }
+
+	  /// <summary>
+	  /// Chance 0-100
+	  /// </summary>
+	  public static bool Chance(int chance)
+	  {
+	    return GetRandom(0, 101) < chance;
+	  }
+
+	  /// <summary>
+	  /// Chance 0-1f
+	  /// </summary>
+	  public static bool Chance(double chance)
+	  {
+	    return Chance((int) (100 * chance));
+	  }
+
+    private static void FillBuffer()
+    {
+      CryptoProvider.GetBytes(Buffer);
+      _bufferOffset = 0;
+    }
 	}
 }

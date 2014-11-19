@@ -23,24 +23,27 @@ namespace Assets.Scripts.Views
             {
                 var page = (int) Mathf.Floor(i / (Size.x * Size.y));
                 var j = i % (Size.x * Size.y);
-                var instance = PrefabsHelper.InstantiateLinkRegion(Pages[page].transform);
                 var region = regions[i];
 
+                if (region == RequestRegion)
+                {
+                    j++;
+                }
+
+                var position = new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
+                var instance = PrefabsHelper.InstantiateLink(Pages[page].transform, position, 240);
+                
                 instance.name = region;
                 instance.GetComponent<UILabel>().text = region;
 
                 if (region == RequestRegion)
                 {
                     instance.GetComponent<GameButton>().Up += () => GetComponent<Engine>().OpenStore();
-                    j++;
                 }
                 else
                 {
                     instance.GetComponent<GameButton>().Up += () => GetComponent<Engine>().SelectRegion(region);
                 }
-
-                instance.transform.localPosition =
-                    new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
             }
         }
     }

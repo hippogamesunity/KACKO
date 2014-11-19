@@ -16,14 +16,13 @@ namespace Assets.Scripts.Views
             {
                 var page = (int) Mathf.Floor(i / (Size.x * Size.y));
                 var j = i % (Size.x * Size.y);
-                var instance = PrefabsHelper.InstantiateLink(Pages[page].transform);
+                var position = new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
+                var instance = PrefabsHelper.InstantiateLink(Pages[page].transform, position);
                 var model = models[i]["name"];
 
                 instance.name = model;
                 instance.GetComponent<UILabel>().text = model;
                 instance.GetComponent<GameButton>().Up += () => GetComponent<Engine>().SelectModel(model);
-                instance.transform.localPosition =
-                    new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
             }
         }
     }

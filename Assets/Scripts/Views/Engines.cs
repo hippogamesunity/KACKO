@@ -12,7 +12,7 @@ namespace Assets.Scripts.Views
 
         protected override Vector2 Size { get { return new Vector2(1, 13); } }
         protected override Vector2 Step { get { return new Vector2(260, 60); } }
-        protected override Vector2 Position { get { return new Vector2(240, 430); } }
+        protected override Vector2 Position { get { return new Vector2(250, 430); } }
 
         protected override void Initialize()
         {

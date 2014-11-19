@@ -1,5 +1,5 @@
 //----------------------------------------------
-//            NGUI: Next-Gen UI kit
+//      NGUI: Next-Gen UI kit
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
@@ -305,7 +305,7 @@ static public class NGUIText
 	[System.Diagnostics.DebuggerStepThrough]
 	static public Color ParseColor24 (string text, int offset)
 	{
-		int r = (NGUIMath.HexToDecimal(text[offset])     << 4) | NGUIMath.HexToDecimal(text[offset + 1]);
+		int r = (NGUIMath.HexToDecimal(text[offset])   << 4) | NGUIMath.HexToDecimal(text[offset + 1]);
 		int g = (NGUIMath.HexToDecimal(text[offset + 2]) << 4) | NGUIMath.HexToDecimal(text[offset + 3]);
 		int b = (NGUIMath.HexToDecimal(text[offset + 4]) << 4) | NGUIMath.HexToDecimal(text[offset + 5]);
 		float f = 1f / 255f;
@@ -1165,7 +1165,7 @@ static public class NGUIText
 
 		// Advanced symbol support contributed by Rudy Pangestu.
 		bool subscript = false;
-		int subscriptMode = 0;  // 0 = normal, 1 = subscript, 2 = superscript
+		int subscriptMode = 0; // 0 = normal, 1 = subscript, 2 = superscript
 		bool bold = false;
 		bool italic = false;
 		bool underline = false;

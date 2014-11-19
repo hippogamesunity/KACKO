@@ -1,5 +1,5 @@
 //----------------------------------------------
-//            NGUI: Next-Gen UI kit
+//      NGUI: Next-Gen UI kit
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
@@ -20,9 +20,9 @@ using UnityEditor;
 /// * OnPress (isDown) is sent when a mouse button gets pressed on the collider.
 /// * OnSelect (selected) is sent when a mouse button is first pressed on an object. Repeated presses won't result in an OnSelect(true).
 /// * OnClick () is sent when a mouse is pressed and released on the same object.
-///   UICamera.currentTouchID tells you which button was clicked.
+///  UICamera.currentTouchID tells you which button was clicked.
 /// * OnDoubleClick () is sent when the click happens twice within a fourth of a second.
-///   UICamera.currentTouchID tells you which button was clicked.
+///  UICamera.currentTouchID tells you which button was clicked.
 /// 
 /// * OnDragStart () is sent to a game object under the touch just before the OnDrag() notifications begin.
 /// * OnDrag (delta) is sent to an object that's being dragged.
@@ -1643,8 +1643,8 @@ public class UICamera : MonoBehaviour
 	{
 		// Whether we're using the mouse
 		bool isMouse = (currentScheme == ControlScheme.Mouse);
-		float drag   = isMouse ? mouseDragThreshold : touchDragThreshold;
-		float click  = isMouse ? mouseClickThreshold : touchClickThreshold;
+		float drag  = isMouse ? mouseDragThreshold : touchDragThreshold;
+		float click = isMouse ? mouseClickThreshold : touchClickThreshold;
 
 		// So we can use sqrMagnitude below
 		drag *= drag;

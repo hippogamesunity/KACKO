@@ -1,18 +1,18 @@
 ----------------------------------------------
-            NGUI: Next-Gen UI kit
+      NGUI: Next-Gen UI kit
  Copyright © 2011-2014 Tasharen Entertainment
-            Version 3.7.4
-    http://www.tasharen.com/?page_id=197
-            support@tasharen.com
+      Version 3.7.4
+  http://www.tasharen.com/?page_id=197
+      support@tasharen.com
 ----------------------------------------------
 
 Thank you for buying NGUI!
 
 PLEASE NOTE that NGUI can only be legally downloaded from the following 3 sources:
 
-  1. Unity Asset Store (Standard License)
-  2. www.tasharen.com (Standard License)
-  3. github.com/tasharen/ngui (Professional and Site Licenses)
+ 1. Unity Asset Store (Standard License)
+ 2. www.tasharen.com (Standard License)
+ 3. github.com/tasharen/ngui (Professional and Site Licenses)
 
 If you've obtained NGUI via some other means then note that your license is effectively invalid,
 as Tasharen cannot provide support for pirated and/or potentially modified software.

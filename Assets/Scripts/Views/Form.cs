@@ -97,7 +97,7 @@ namespace Assets.Scripts.Views
             {
                 new EventDelegate(() =>
                 {
-                    var age = Math.Max(16, int.Parse(Age.value));
+                    var age = Math.Max(18, int.Parse(Age.value));
 
                     age = Math.Min(99, age);
 
@@ -114,6 +114,13 @@ namespace Assets.Scripts.Views
                     var exp = Math.Max(0, int.Parse(Exp.value));
 
                     exp = Math.Min(99, exp);
+
+                    var fix = Profile.Age - exp - 16;
+
+                    if (fix < 0)
+                    {
+                        exp += fix;
+                    }
 
                     Profile.Exp = exp;
                     Profile.Save();

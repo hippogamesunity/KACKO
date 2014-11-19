@@ -13,7 +13,18 @@ namespace Assets.Scripts.Views
 
         protected virtual Vector2 Size { get { return new Vector2(3, 18); } }
         protected virtual Vector2 Step { get { return new Vector2(180, 45); } }
-        protected virtual Vector2 Position { get { return new Vector2(240, 430); } }
+        protected virtual Vector2 Position { get { return new Vector2(250, 430); } }
+
+        public void Start()
+        {
+            if (TweenPanel == null)
+            {
+                var genericList = GameObject.Find("GenericList");
+
+                TweenPanel = genericList.GetComponent<TweenPanel>();
+                Paging = TweenPanel.transform.GetChild(0);
+            }
+        }
 
         public void SlideRight()
         {
@@ -35,14 +46,17 @@ namespace Assets.Scripts.Views
         {
             Index = 0;
 
-            foreach (var pages in Pages)
+            foreach (Transform child in TweenPanel.transform)
             {
-                Destroy(pages.gameObject);
+                if (child != Paging)
+                {
+                    Destroy(child.gameObject);
+                }
             }
 
-            foreach (var paging in Pagings)
+            foreach (Transform child in Paging)
             {
-                Destroy(paging.gameObject);
+                Destroy(child.gameObject);
             }
 
             Pages.Clear();

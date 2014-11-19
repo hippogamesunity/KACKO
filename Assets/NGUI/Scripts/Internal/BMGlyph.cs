@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------
-//            NGUI: Next-Gen UI kit
+//      NGUI: Next-Gen UI kit
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
@@ -85,7 +85,7 @@ public class BMGlyph
 			offsetY += offset;
 		}
 
-		if (x1 > xMax) width  -= x1 - xMax;
+		if (x1 > xMax) width -= x1 - xMax;
 		if (y1 > yMax) height -= y1 - yMax;
 	}
 }

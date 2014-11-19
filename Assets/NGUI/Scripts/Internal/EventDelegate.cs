@@ -1,5 +1,5 @@
 //----------------------------------------------
-//            NGUI: Next-Gen UI kit
+//      NGUI: Next-Gen UI kit
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
@@ -372,7 +372,7 @@ public class EventDelegate
 				}
 				catch (System.Exception ex)
 				{
-					Debug.LogError("Failed to bind " + type + "." + mMethodName + "\n" +  ex.Message);
+					Debug.LogError("Failed to bind " + type + "." + mMethodName + "\n" + ex.Message);
 					return;
 				}
  #else // NETFX_CORE
@@ -384,7 +384,7 @@ public class EventDelegate
 						if (mMethod != null) break;
 					}
 					catch (System.Exception) { }
-  #if UNITY_WP8
+ #if UNITY_WP8
 					// For some odd reason Type.GetMethod(name, bindingFlags) doesn't seem to work on WP8...
 					try
 					{
@@ -392,7 +392,7 @@ public class EventDelegate
 						if (mMethod != null) break;
 					}
 					catch (System.Exception) { }
-  #endif
+ #endif
 					type = type.BaseType;
 				}
  #endif // NETFX_CORE
@@ -523,7 +523,7 @@ public class EventDelegate
 					else msg += mTarget.GetType() + "." + mMethod.Name;
 					
 					msg += ": " + ex.Message;
-					msg += "\n  Expected: ";
+					msg += "\n Expected: ";
 
 					ParameterInfo[] pis = mMethod.GetParameters();
 
@@ -538,7 +538,7 @@ public class EventDelegate
 							msg += ", " + pis[i].ParameterType;
 					}
 
-					msg += "\n  Received: ";
+					msg += "\n Received: ";
 
 					if (mParameters.Length == 0)
 					{
@@ -555,7 +555,7 @@ public class EventDelegate
 				}
 
 				// Clear the parameters so that references are not kept
-				for (int i = 0, imax = mArgs.Length; i < imax;  ++i) mArgs[i] = null;
+				for (int i = 0, imax = mArgs.Length; i < imax; ++i) mArgs[i] = null;
 			}
 			return true;
 		}

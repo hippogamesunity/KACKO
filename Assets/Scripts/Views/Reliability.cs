@@ -8,7 +8,7 @@ namespace Assets.Scripts.Views
     {
         protected override Vector2 Size { get { return new Vector2(1, 18); } }
         protected override Vector2 Step { get { return new Vector2(260, 60); } }
-        protected override Vector2 Position { get { return new Vector2(240, 430); } }
+        protected override Vector2 Position { get { return new Vector2(250, 430); } }
 
         protected override void Initialize()
         {
@@ -30,9 +30,9 @@ namespace Assets.Scripts.Views
             
             for (var i = 0; i < rating.Count; i++)
             {
-                var page = (int)Mathf.Floor(i / (Size.x * Size.y));
+                var page = (int) Mathf.Floor(i / (Size.x * Size.y));
                 var j = i % (Size.x * Size.y);
-                var instance = PrefabsHelper.InstantiateReliability(Pages[page].transform);
+                var instance = PrefabsHelper.InstantiateInfo(Pages[page].transform);
                 var value = rating.ElementAt(i).Key;
                 var description = rating.ElementAt(i).Value;
 

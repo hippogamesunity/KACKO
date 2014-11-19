@@ -1,5 +1,5 @@
 //----------------------------------------------
-//            NGUI: Next-Gen UI kit
+//      NGUI: Next-Gen UI kit
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
@@ -995,7 +995,7 @@ static public class NGUIMath
 		}
 
 		// Centered pivot requires power-of-two dimensions
-		if (piv.x == 0.5f) finalWidth  = ((finalWidth  >> 1) << 1);
+		if (piv.x == 0.5f) finalWidth = ((finalWidth >> 1) << 1);
 		if (piv.y == 0.5f) finalHeight = ((finalHeight >> 1) << 1);
 
 		// Update the position, width and height

@@ -9,10 +9,6 @@ namespace Assets.Scripts.Views
     {
         public string Bounds;
 
-        protected override Vector2 Size { get { return new Vector2(3, 18); } }
-        protected override Vector2 Step { get { return new Vector2(180, 45); } }
-        protected override Vector2 Position { get { return new Vector2(180, 430); } }
-
         protected override void Initialize()
         {
             var years = Enumerable.Range(0, 40).Select(i => DateTime.Now.Year - i).ToList();
@@ -23,14 +19,13 @@ namespace Assets.Scripts.Views
             {
                 var page = (int) Mathf.Floor(i / (Size.x * Size.y));
                 var j = i % (Size.x * Size.y);
-                var instance = PrefabsHelper.InstantiateLinkYear(Pages[page].transform);
+                var position = new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
+                var instance = PrefabsHelper.InstantiateLink(Pages[page].transform, position);
                 var year = years[i];
 
                 instance.name = Convert.ToString(year);
                 instance.GetComponent<UILabel>().SetText(year);
                 instance.GetComponent<GameButton>().Up += () => GetComponent<Engine>().SelectYear(year);
-                instance.transform.localPosition =
-                    new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
 
                 if (Bounds == null) continue;
 

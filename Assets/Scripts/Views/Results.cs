@@ -28,6 +28,8 @@ namespace Assets.Scripts.Views
                     continue;
                 }
 
+                Debug.Log(companyCode);
+
                 var price = result["result"]["total"]["premium"];
                 var regions = result["values"]["region"].ToList<string>();
                 var company = companies.Childs.FirstOrDefault(i => i["calculators"].Childs.Any(j => j["code"].Value == companyCode.Value));
@@ -40,6 +42,7 @@ namespace Assets.Scripts.Views
 
                 results.Add(new Result
                 {
+                    Json = result,
                     CompanyName = companyName.Value,
                     CompanyShortName = companyShortName.Value,
                     Rating = JsonHelper.GetInt(companyRating),

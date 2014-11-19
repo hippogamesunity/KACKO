@@ -1,5 +1,5 @@
 //----------------------------------------------
-//            NGUI: Next-Gen UI kit
+//      NGUI: Next-Gen UI kit
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
@@ -600,9 +600,9 @@ public class UIPanel : UIRect
 
 				//if (anchorOffset && (mCam == null || mCam.transform.parent != cachedTransform))
 				//{
-				//    Vector3 off = cachedTransform.position;
-				//    for (int i = 0; i < 4; ++i)
-				//        corners[i] += off;
+				//  Vector3 off = cachedTransform.position;
+				//  for (int i = 0; i < 4; ++i)
+				//    corners[i] += off;
 				//}
 				return corners;
 			}
@@ -882,7 +882,7 @@ public class UIPanel : UIRect
 
 		// Only DirectX 9 needs the half-pixel offset
 		if (mHalfPixelOffset) mHalfPixelOffset = (SystemInfo.graphicsShaderLevel < 40 &&
-		                                          SystemInfo.graphicsDeviceVersion.Contains("Direct3D"));
+		                     SystemInfo.graphicsDeviceVersion.Contains("Direct3D"));
 	}
 
 	/// <summary>
@@ -954,8 +954,8 @@ public class UIPanel : UIRect
 				// Note that when enabling this, the 'if (rigidbody == null)' statement above should be adjusted as well.
 				//else
 				//{
-				//    Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
-				//    rb.isKinematic = true;
+				//  Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
+				//  rb.isKinematic = true;
 				//}
 			}
 		}

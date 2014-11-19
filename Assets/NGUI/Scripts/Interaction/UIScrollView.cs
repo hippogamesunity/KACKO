@@ -1,5 +1,5 @@
 //----------------------------------------------
-//            NGUI: Next-Gen UI kit
+//      NGUI: Next-Gen UI kit
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
@@ -264,7 +264,7 @@ public class UIScrollView : MonoBehaviour
 			Vector4 clip = mPanel.finalClipRegion;
 			Bounds b = bounds;
 
-			float hx = (clip.z == 0f) ? Screen.width  : clip.z * 0.5f;
+			float hx = (clip.z == 0f) ? Screen.width : clip.z * 0.5f;
 			float hy = (clip.w == 0f) ? Screen.height : clip.w * 0.5f;
 
 			if (canMoveHorizontally)

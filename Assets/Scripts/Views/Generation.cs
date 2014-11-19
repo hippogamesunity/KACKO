@@ -13,7 +13,7 @@ namespace Assets.Scripts.Views
 
         protected override Vector2 Size { get { return new Vector2(1, 18); } }
         protected override Vector2 Step { get { return new Vector2(260, 45); } }
-        protected override Vector2 Position { get { return new Vector2(240, 430); } }
+        protected override Vector2 Position { get { return new Vector2(250, 430); } }
 
         protected override void Initialize()
         {
@@ -29,7 +29,8 @@ namespace Assets.Scripts.Views
 
                 var page = (int) Mathf.Floor(i / (Size.x * Size.y));
                 var j = i % (Size.x * Size.y);
-                var instance = PrefabsHelper.InstantiateLinkGeneration(Pages[page].transform);
+                var position = new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
+                var instance = PrefabsHelper.InstantiateLink(Pages[page].transform, position, 500);
                 var generation = generations[i];
 
                 if (generation == Skip)
@@ -47,7 +48,6 @@ namespace Assets.Scripts.Views
 
                 instance.name = generation;
                 instance.GetComponent<UILabel>().text = generation;
-                instance.transform.localPosition = new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
             }
         }
     }

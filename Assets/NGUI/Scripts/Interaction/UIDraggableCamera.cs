@@ -1,5 +1,5 @@
 //----------------------------------------------
-//            NGUI: Next-Gen UI kit
+//      NGUI: Next-Gen UI kit
 // Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
@@ -90,7 +90,7 @@ public class UIDraggableCamera : MonoBehaviour
 		if (rootForBounds == null || rootForBounds.childCount == 0) return Vector3.zero;
 
 		Vector3 bottomLeft = new Vector3(mCam.rect.xMin * Screen.width, mCam.rect.yMin * Screen.height, 0f);
-		Vector3 topRight   = new Vector3(mCam.rect.xMax * Screen.width, mCam.rect.yMax * Screen.height, 0f);
+		Vector3 topRight  = new Vector3(mCam.rect.xMax * Screen.width, mCam.rect.yMax * Screen.height, 0f);
 
 		bottomLeft = mCam.ScreenToWorldPoint(bottomLeft);
 		topRight = mCam.ScreenToWorldPoint(topRight);

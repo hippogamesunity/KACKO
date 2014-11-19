@@ -1,28 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
 	public static class PrefabsHelper
 	{
-        public static GameObject InstantiateLink(Transform parent)
+        public static GameObject InstantiateLink(Transform parent, Vector2 position, int width = 150, UIWidget.Pivot pivot = UIWidget.Pivot.BottomLeft)
         {
-            return Instantiate("Link", parent);
-        }
+            var link = Instantiate("Link", parent);
+            var lables = new List<UILabel>
+            {
+                link.GetComponent<UILabel>(),
+                link.GetComponentInChildren<UILabel>()
+            };
 
-        public static GameObject InstantiateLinkYear(Transform parent)
-        {
-            return Instantiate("LinkYear", parent);
-        }
+            foreach (var label in lables.Where(i => i != null))
+            {
+                label.width = width;
+                label.pivot = pivot;
+            }
 
-        public static GameObject InstantiateLinkRegion(Transform parent)
-        {
-            return Instantiate("LinkRegion", parent);
-        }
+            link.transform.localPosition = position;
 
-        public static GameObject InstantiateLinkGeneration(Transform parent)
-        {
-            return Instantiate("LinkGeneration", parent);
+            var collider = link.GetComponent<BoxCollider2D>();
+
+            collider.size = new Vector2(width, 40);
+            collider.center = pivot == UIWidget.Pivot.Center ? Vector2.zero : new Vector2(width / 2f, 0);
+
+            return link;
         }
 
         public static GameObject InstantiateLinkEngine(Transform parent)
@@ -30,9 +37,14 @@ namespace Assets.Scripts
             return Instantiate("LinkEngine", parent);
         }
 
-        public static GameObject InstantiateReliability(Transform parent)
+        public static GameObject InstantiateInfo(Transform parent)
         {
-            return Instantiate("Reliability", parent);
+            return Instantiate("Info", parent);
+        }
+
+        public static GameObject InstantiateOption(Transform parent)
+        {
+            return Instantiate("Option", parent);
         }
 
         public static GameObject InstantiatePage(Transform parent)
