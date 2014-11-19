@@ -225,9 +225,9 @@ namespace Assets.Scripts
                 {
                     var result = CalcApi.Calc(request, Profile.ApiKey);
 
-                    Profile.SaveResult(request, result);
-
                     calc = JSON.Parse(result);
+
+                    Profile.SaveResult(request, result);
                 }
 
                 GetComponent<Results>().Initialize(Profile.Companies, calc, osago);

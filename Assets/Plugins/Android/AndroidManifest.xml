@@ -44,7 +44,7 @@
     <!--<activity android:name="org.onepf.openiab.UnityProxyActivity"
          android:launchMode="singleTask"
          android:label="@string/app_name"
-         android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">-->
-    </activity>
+         android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
+    </activity>-->
   </application>  
 </manifest>
