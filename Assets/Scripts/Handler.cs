@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Assets.Scripts.Common;
 using Assets.Scripts.Views;
 using SimpleJSON;
@@ -244,8 +245,8 @@ namespace Assets.Scripts
 
         public void WriteEmail()
         {
-            Application.OpenURL(string.Format("mailto:{0}?subject={1}&body={2}",
-                "blackrainbowgames@gmail.com", "Предложение о сотрудничестве", ""));
+            Application.OpenURL(Uri.EscapeUriString(string.Format("mailto:{0}?subject={1}&body={2}",
+                "blackrainbowgames@gmail.com", "Предложение о сотрудничестве", "")));
         }
 
         public void OpenReliability()
