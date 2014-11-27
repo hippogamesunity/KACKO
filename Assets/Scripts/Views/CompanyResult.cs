@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Common;
+﻿using System;
+using Assets.Scripts.Common;
 using SimpleJSON;
 using UnityEngine;
 
@@ -40,8 +41,30 @@ namespace Assets.Scripts.Views
             Phone = company["phone"]["Москва"].Value;
             Icon.spriteName = company["icon"].Value;
 
-            Navigate.Enabled = company["site"].Value != "";
-            Call.Enabled = company["phone"]["Москва"].Value != "";
+            var phone = Call.transform.FindChild("Text").GetComponent<UILabel>();
+            var site = Navigate.transform.FindChild("Text").GetComponent<UILabel>();
+
+            if (string.IsNullOrEmpty(Phone))
+            {
+                Call.Enabled = false;
+                phone.SetText("телефон");
+            }
+            else
+            {
+                Call.Enabled = true;
+                phone.SetText("телефон\n{0}", Phone);
+            }
+
+            if (string.IsNullOrEmpty(Url))
+            {
+                Navigate.Enabled = false;
+                site.SetText("сайт");
+            }
+            else
+            {
+                Navigate.Enabled = true;
+                site.SetText("сайт\n{0}", new Uri(Url).Host.Replace("www.", null));
+            }
 
             #if UNITY_IPHONE
 

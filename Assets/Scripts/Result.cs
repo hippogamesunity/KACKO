@@ -10,6 +10,5 @@ namespace Assets.Scripts
         public string CompanyShortName;
         public int Rating;
         public int Price;
-        public List<string> Regions;
     }
 }

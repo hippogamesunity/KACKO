@@ -21,7 +21,7 @@ namespace Assets.Scripts.Views
                 var result = calc["results"][k];
                 var companyCode = result["info"]["code"];
 
-                if (result["error"].Count > 0)
+                if (result["error"].Count > 0 && !osago)
                 {
                     LogFormat("Error in {0}: {1}", companyCode.Value, result["error"]["message"]);
 
@@ -31,7 +31,6 @@ namespace Assets.Scripts.Views
                 Debug.Log(companyCode);
 
                 var price = result["result"]["total"]["premium"];
-                var regions = result["values"]["region"].ToList<string>();
                 var company = companies.Childs.FirstOrDefault(i => i["calculators"].Childs.Any(j => j["code"].Value == companyCode.Value));
 
                 if (company == null) continue;
@@ -46,8 +45,7 @@ namespace Assets.Scripts.Views
                     CompanyName = companyName.Value,
                     CompanyShortName = companyShortName.Value,
                     Rating = JsonHelper.GetInt(companyRating),
-                    Price = JsonHelper.GetInt(price),
-                    Regions = regions
+                    Price = JsonHelper.GetInt(price)
                 });
             }
 
