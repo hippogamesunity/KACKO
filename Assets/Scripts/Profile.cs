@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using Assets.Scripts.Common;
 using SimpleJSON;
@@ -26,8 +25,9 @@ namespace Assets.Scripts
         public const string Companies = "Companies";
         public const string Cars = "Cars";
 
-        public const string LastRequest = "LastResultUrl";
+        public const string LastRequest = "LastRequest";
         public const string LastResultTimestamp = "LastResultTimestamp";
+        public const string LastResult = "LastResult";
     }
 
     public static class Profile
@@ -51,11 +51,6 @@ namespace Assets.Scripts
 
         private const string Login = "mYhx2YytWYulmY392ZtFXZAN2Zh1Wauw2Yt9";
         private const string PasswordHash = "TZ3YWN3IDNhNGZlRjY1ETY3YmNwEzNxY2Y0IzM3Q2N=Y";
-
-        private static string CachePath
-        {
-            get { return Path.Combine(Application.persistentDataPath, "cache"); }
-        }
 
         public static void Load()
         {
@@ -114,22 +109,27 @@ namespace Assets.Scripts
             PlayerPrefs.Save();
         }
 
-        public static void SaveResult(string request, string result)
+        public static void SaveResult(string request, JSONNode result)
         {
-            File.WriteAllText(CachePath, result);
-
             PlayerPrefs.SetString(Keys.LastRequest, request);
             PlayerPrefs.SetString(Keys.LastResultTimestamp, Convert.ToString(DateTime.UtcNow));
+            PlayerPrefs.SetString(Keys.LastResult, result.SaveToCompressedBase64());
             PlayerPrefs.Save();
         }
 
         public static string GetResult(string request)
         {
-            if (PlayerPrefs.GetString(Keys.LastRequest) == request
-                && (DateTime.UtcNow - DateTime.Parse(PlayerPrefs.GetString(Keys.LastResultTimestamp))).TotalHours < 24
-                && File.Exists(CachePath))
+            if (PlayerPrefs.GetString(Keys.LastRequest) == request && PlayerPrefs.HasKey(Keys.LastResult)
+                && (DateTime.UtcNow - DateTime.Parse(PlayerPrefs.GetString(Keys.LastResultTimestamp))).TotalHours < 24)
             {
-                return File.ReadAllText(CachePath);
+                try
+                {
+                    return JSONNode.LoadFromCompressedBase64(PlayerPrefs.GetString(Keys.LastResult));
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e);
+                }
             }
 
             return null;
