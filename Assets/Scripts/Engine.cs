@@ -23,7 +23,6 @@ namespace Assets.Scripts
             //PlayerPrefs.DeleteAll(); // TODO:
             Profile.Load();
             ViewBase.Current = GetComponent<Intro>();
-            GetComponent<GameShop>().Refresh();
         }
 
         private DateTime _down;
