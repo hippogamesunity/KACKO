@@ -15,6 +15,7 @@ namespace Assets.Scripts
         public const string Power = "Power";
         public const string Region = "Region";
         public const string Franchise = "Franchise";
+        public const string Kbm = "Kbm";
         public const string Sex = "Sex";
         public const string Age = "Age";
         public const string Exp = "Exp";
@@ -43,6 +44,7 @@ namespace Assets.Scripts
         public static int Power;
         public static string Region;
         public static int Franchise;
+        public static float Kbm;
 
         public static string Sex;
         public static int Age;
@@ -102,6 +104,7 @@ namespace Assets.Scripts
             PlayerPrefs.SetInt(Keys.Power, Power);
             PlayerPrefs.SetString(Keys.Region, Region);
             PlayerPrefs.SetInt(Keys.Franchise, Franchise);
+            PlayerPrefs.SetFloat(Keys.Kbm, Kbm);
             PlayerPrefs.SetString(Keys.Sex, Sex);
             PlayerPrefs.SetInt(Keys.Age, Age);
             PlayerPrefs.SetInt(Keys.Exp, Exp);
@@ -171,6 +174,10 @@ namespace Assets.Scripts
             Franchise = PlayerPrefs.HasKey(Keys.Franchise)
                 ? PlayerPrefs.GetInt(Keys.Franchise)
                 : 0;
+
+            Kbm = PlayerPrefs.HasKey(Keys.Kbm)
+                ? PlayerPrefs.GetFloat(Keys.Kbm)
+                : 1;
 
             Sex = PlayerPrefs.HasKey(Keys.Sex)
                 ? PlayerPrefs.GetString(Keys.Sex)

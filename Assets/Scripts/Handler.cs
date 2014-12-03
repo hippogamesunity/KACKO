@@ -79,6 +79,10 @@ namespace Assets.Scripts
             {
                 GetComponent<CompanyResult>().Open(TweenDirection.Left);
             }
+            else if (ViewBase.Current is Additional)
+            {
+                GetComponent<Form>().Open(TweenDirection.Left);
+            }
         }
 
         public void Begin()
@@ -191,7 +195,6 @@ namespace Assets.Scripts
             Profile.Year = year;
             Profile.Save();
             GetComponent<Form>().Open(TweenDirection.Right);
-            GetComponent<Form>().UpdateForm();
         }
 
         public void SelectRegion()
@@ -203,8 +206,7 @@ namespace Assets.Scripts
         {
             Profile.Region = region;
             Profile.Save();
-            GetComponent<Form>().Open(TweenDirection.Right);
-            GetComponent<Form>().UpdateForm();
+            GetComponent<Form>().Open(TweenDirection.Left);
         }
 
         public void SelectFranchise()
@@ -216,8 +218,19 @@ namespace Assets.Scripts
         {
             Profile.Franchise = franchise;
             Profile.Save();
-            GetComponent<Form>().Open(TweenDirection.Right);
-            GetComponent<Form>().UpdateForm();
+            GetComponent<Additional>().Open(TweenDirection.Left);
+        }
+
+        public void SelectKbm()
+        {
+            GetComponent<Kbm>().Open(TweenDirection.Right);
+        }
+
+        public void SelectKbm(float kbm)
+        {
+            Profile.Kbm = kbm;
+            Profile.Save();
+            GetComponent<Additional>().Open(TweenDirection.Left);
         }
 
         public void ChangeSex()
@@ -257,6 +270,11 @@ namespace Assets.Scripts
         public void OpenOptions()
         {
             GetComponent<Options>().Open(TweenDirection.Right);
+        }
+
+        public void OpenAdditional()
+        {
+            GetComponent<Additional>().Open(TweenDirection.Right);
         }
     }
 }

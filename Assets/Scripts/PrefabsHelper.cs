@@ -27,7 +27,7 @@ namespace Assets.Scripts
             var collider = link.GetComponent<BoxCollider2D>();
 
             collider.size = new Vector2(width, 40);
-            collider.center = pivot == UIWidget.Pivot.Center ? Vector2.zero : new Vector2(width / 2f, 0);
+            collider.center = pivot == UIWidget.Pivot.Center ? Vector2.zero : new Vector2(collider.size.x / 2, collider.size.y / 2);
 
             return link;
         }

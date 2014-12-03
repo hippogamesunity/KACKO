@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SimpleJSON;
+﻿using SimpleJSON;
 
 namespace Assets.Scripts
 {

@@ -53,7 +53,7 @@ namespace Assets.Scripts.Views
             {
                 var price = JsonHelper.GetInt(calc["results"].Childs.Single(i => i["info"]["code"].Value == "OSAGO")["result"]["total"]["premium"]);
 
-                results.ForEach(i => i.Price = price);
+                results.ForEach(i => i.Price = (int) (price * Profile.Kbm));
                 results = results.OrderByDescending(i => i.Rating).ToList();
             }
             else

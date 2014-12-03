@@ -10,7 +10,6 @@ namespace Assets.Scripts.Views
         public UIInput Price;
         public UIInput Power;
         public UILabel Region;
-        public UILabel Franchise;
         public UILabel Sex;
         public UIInput Age;
         public UIInput Exp;
@@ -54,7 +53,6 @@ namespace Assets.Scripts.Views
             }
 
             Region.SetText(Profile.Region);
-            Franchise.SetText(Profile.Franchise);
             Price.value = Convert.ToString(Profile.Price);
             Power.value = Convert.ToString(Profile.Power);
             Sex.SetText(Profile.Sex == "m" ? "М" : "Ж");

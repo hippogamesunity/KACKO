@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Common;
 using Assets.Scripts.Views;
@@ -246,10 +247,22 @@ namespace Assets.Scripts
             Debug.Log(exception);
 
             const string errorPattern = "ошибка подключения к API: {0}";
-            var message = exception.Message;
 
-            message = message.Replace("Error: NameResolutionFailure", "не удалось установить соединение с сервером");
-            message = message.Replace("The request timed out", "превышен интервал ожидания для запроса");
+            var message = exception.Message;
+            var replaces = new Dictionary<string, string>
+            {
+                { "NameResolutionFailure", "не удалось установить соединение с сервером" },
+                { "The request timed out", "превышен интервал ожидания для запроса" },
+                { "ReadDone2", "не удалось установить соединение с сервером" },
+            };
+
+            foreach (var replace in replaces)
+            {
+                if (message.Contains(replace.Key))
+                {
+                    message = replace.Value;
+                }
+            }
 
             StopLoading(string.Format(errorPattern, message));
         }

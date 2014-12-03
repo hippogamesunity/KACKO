@@ -13,7 +13,7 @@ namespace Assets.Scripts
         {
             try
             {
-                return (int)float.Parse(value.Replace(",", ".").Replace(" ", null));
+                return (int) float.Parse(value.Replace(",", ".").Replace(" ", null));
             }
             catch
             {
