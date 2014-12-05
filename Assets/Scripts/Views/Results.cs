@@ -79,7 +79,7 @@ namespace Assets.Scripts.Views
                 {
                     var companyResult = GetComponent<CompanyResult>();
 
-                    companyResult.Initialize(result, company);
+                    companyResult.Initialize(result, company, osago);
                     companyResult.Open(TweenDirection.Right);
                 };
                 instance.transform.localPosition = new Vector2(i % 3 * Step.x - Position.x, Position.y - Mathf.Floor(j / Size.x) * Step.y);
