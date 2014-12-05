@@ -18,7 +18,7 @@ namespace Assets.Scripts.Views
                 var page = (int) Mathf.Floor(i / (Size.x * Size.y));
                 var j = i % (Size.x * Size.y);
                 var position = new Vector2(Step.x * Mathf.Floor(j / Size.y) - Position.x, Position.y - Step.y * (j % Size.y));
-                var instance = PrefabsHelper.InstantiateLink(Pages[page].transform, position);
+                var instance = PrefabsHelper.InstantiateLink(Pages[page].transform, position, 240);
                 var kbm = kbms[i];
 
                 instance.name = kbm;

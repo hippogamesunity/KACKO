@@ -83,6 +83,10 @@ namespace Assets.Scripts
             {
                 GetComponent<Form>().Open(TweenDirection.Left);
             }
+            else if (ViewBase.Current is Kbm)
+            {
+                GetComponent<Additional>().Open(TweenDirection.Left);
+            }
         }
 
         public void Begin()

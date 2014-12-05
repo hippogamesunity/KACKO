@@ -7,7 +7,7 @@ namespace Assets.Scripts
 {
 	public static class PrefabsHelper
 	{
-        public static GameObject InstantiateLink(Transform parent, Vector2 position, int width = 150, UIWidget.Pivot pivot = UIWidget.Pivot.BottomLeft)
+        public static GameObject InstantiateLink(Transform parent, Vector2 position, int width = 150, UIWidget.Pivot pivot = UIWidget.Pivot.Left)
         {
             var link = Instantiate("Link", parent);
             var lables = new List<UILabel>
@@ -27,7 +27,7 @@ namespace Assets.Scripts
             var collider = link.GetComponent<BoxCollider2D>();
 
             collider.size = new Vector2(width, 40);
-            collider.center = pivot == UIWidget.Pivot.Center ? Vector2.zero : new Vector2(collider.size.x / 2, collider.size.y / 2);
+            collider.center = pivot == UIWidget.Pivot.Center ? Vector2.zero : new Vector2(collider.size.x / 2, 0);
 
             return link;
         }

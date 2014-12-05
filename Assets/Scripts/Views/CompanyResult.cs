@@ -24,7 +24,7 @@ namespace Assets.Scripts.Views
             Call.Up += () => Application.OpenURL(string.Format("tel:{0}", Phone));
         }
 
-        public void Initialize(Result result, JSONNode company)
+        public void Initialize(Result result, JSONNode company, bool osago)
         {
             Name.SetText(result.CompanyName);
             Price.SetText("{0} руб. ({1:F2}%)", result.Price.ToPriceInt(), 100 * (float) result.Price / Profile.Price);
@@ -79,7 +79,7 @@ namespace Assets.Scripts.Views
             //    Debug.Log(string.Format("{0}: {1}", options[key]["title"], result.Json["data"][key]));
             //}
 
-            Options.Enabled = options.Count > 0;
+            Options.Enabled = !osago && options.Count > 0;
             GetComponent<Options>().CompanyResult = result.Json;
         }
     }
