@@ -66,7 +66,7 @@ namespace Assets.Scripts.Views
             {
                 new EventDelegate(() =>
                 {
-                    var price = Math.Max(100000, int.Parse(Price.value));
+                    var price = Math.Max(10000, int.Parse(Price.value));
 
                     price = Math.Min(99999999, price);
 

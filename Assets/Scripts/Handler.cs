@@ -263,7 +263,7 @@ namespace Assets.Scripts
         public void WriteEmail()
         {
             Application.OpenURL(Uri.EscapeUriString(string.Format("mailto:{0}?subject={1}&body={2}",
-                "blackrainbowgames@gmail.com", "Предложение о сотрудничестве", "")));
+                "hippogamesunity@gmail.com", "Предложение о сотрудничестве", "")));
         }
 
         public void OpenReliability()

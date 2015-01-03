@@ -10,7 +10,7 @@ PlayerSettings:
   targetGlesGraphics: 1
   targetResolution: 0
   accelerometerFrequency: 60
-  companyName: BlackRainbowApps
+  companyName: Hippo Games & Apps
   productName: "KACKO \u041A\u043B\u0443\u0431"
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -65,12 +65,12 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  iPhoneBundleIdentifier: com.BlackRainbowApps.KACKO
+  iPhoneBundleIdentifier: com.KASKO
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
   productGUID: bcb7ce43a37cbbb4391ac1da254d6646
-  iPhoneBundleVersion: 1.2
-  AndroidBundleVersionCode: 12
+  iPhoneBundleVersion: 1.0
+  AndroidBundleVersionCode: 10
   AndroidMinSdkVersion: 14
   AndroidPreferredInstallLocation: 0
   aotOptions: 
@@ -89,7 +89,7 @@ PlayerSettings:
   uIStatusBarHidden: 0
   uIExitOnSuspend: 0
   uIStatusBarStyle: 0
-  iPhoneSplashScreen: {fileID: 2800000, guid: 664d488a09d05dc4184969038d907fd1, type: 3}
+  iPhoneSplashScreen: {fileID: 2800000, guid: 57876f8c868543746b125646afc59958, type: 3}
   iPhoneHighResSplashScreen: {fileID: 2800000, guid: be5d5003e36a83e488283607a91368d0,
     type: 3}
   iPhoneTallHighResSplashScreen: {fileID: 2800000, guid: 51d9cc9a37fe13c4e9f1e882729d8832,
@@ -103,9 +103,9 @@ PlayerSettings:
   iPadHighResLandscapeSplashScreen: {fileID: 2800000, guid: f220693424a74c14c9fd2cd9634c961e,
     type: 3}
   AndroidTargetDevice: 0
-  AndroidSplashScreenScale: 1
+  AndroidSplashScreenScale: 2
   AndroidKeystoreName: C:/GitHub/KACKO/.keystore
-  AndroidKeyaliasName: brgames
+  AndroidKeyaliasName: hippo
   resolutionDialogBanner: {fileID: 0}
   m_BuildTargetIcons:
   - m_BuildTarget: 

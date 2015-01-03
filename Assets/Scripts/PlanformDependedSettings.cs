@@ -4,7 +4,7 @@
     {
         #if UNITY_ANDROID
 
-        public const string StoreLink = "https://play.google.com/store/apps/details?id=com.BlackRainbowApps.KACKO";
+        public const string StoreLink = "https://play.google.com/store/apps/details?id=com.KASKO";
         
         #elif UNITY_IPHONE
 

@@ -84,6 +84,7 @@ namespace Assets.Scripts
                 "regions", new JSONArray
                 {
                     Region.Default,
+                    "Московская область",
                     "Санкт-Петербург",
                     "Абакан",
                     "Анадырь",
